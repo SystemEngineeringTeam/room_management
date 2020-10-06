@@ -21,7 +21,6 @@ func CardResponse(w http.ResponseWriter, r *http.Request) {
 	jsonBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusServiceUnavailable)
-		fmt.Println("")
 		fmt.Println("Can't catch uid(io error)")
 		return
 	}
@@ -30,7 +29,7 @@ func CardResponse(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.Unmarshal(jsonBytes, &rec); err != nil {
 		w.WriteHeader(http.StatusServiceUnavailable)
-		fmt.Println("Can't catch uid(JSON Unmarshal error)", err)
+		fmt.Println("Can't catch uid(JSON Unmarshal error)")
 		return
 	}
 
