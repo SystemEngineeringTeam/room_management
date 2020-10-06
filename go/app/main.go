@@ -11,5 +11,6 @@ import (
 func main() {
 	log.Print("hello world\n")
 	http.HandleFunc("/card", apifuncs.CardResponse)
+	http.HandleFunc("/user", apifuncs.UserResponse)
 	http.ListenAndServe(":80", nil)
 }
