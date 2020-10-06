@@ -10,6 +10,6 @@ import (
 
 func main() {
 	log.Print("hello world\n")
-	http.HandleFunc("/card", apifuncs.CardResponce)
+	http.HandleFunc("/card", apifuncs.CardResponse)
 	http.ListenAndServe(":80", nil)
 }

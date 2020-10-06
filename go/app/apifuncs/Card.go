@@ -3,28 +3,39 @@ package apifuncs
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
+
+type uidJSON struct {
+	UID string `json:"uid"`
+}
 
 type resCardPost struct {
 	Status string `json:"status"`
 }
 
-//CardResponce is /card no post ni taisuru func
-func CardResponce(w http.ResponseWriter, r *http.Request) {
-	q := r.URL.Query()
+//CardResponse is /card no post ni taisuru func
+func CardResponse(w http.ResponseWriter, r *http.Request) {
+	jsonBytes, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		w.WriteHeader(http.StatusServiceUnavailable)
+		fmt.Println("")
+		fmt.Println("Can't catch uid(io error)")
+		return
+	}
 
-	var uid string
+	var rec uidJSON
 
-	if len(q["uid"]) > 0 {
-		uid = q["uid"][0]
-	} else {
-		fmt.Println("Can't catch uid")
+	if err := json.Unmarshal(jsonBytes, &rec); err != nil {
+		w.WriteHeader(http.StatusServiceUnavailable)
+		fmt.Println("Can't catch uid(JSON Unmarshal error)", err)
+		return
 	}
 
 	if r.Method == http.MethodPost {
-		status := uid //ありえない代入ですが、uidをどこかで使わないといけないので…
+		status := rec.UID //ありえない代入ですが、uidをどこかで使わないといけないので…
 		//do NANI
 		if false {
 			status = "unabailable"
