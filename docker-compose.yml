@@ -1,0 +1,36 @@
+version: "3"
+services:
+    api:
+        container_name: room_management_api
+        build: ./go
+        volumes:
+            - ./go/app:/app
+        command:
+            - "go"
+            - "run"
+            - "main.go"
+        # environment:
+        #     WAIT_HOSTS: room_management_mysql
+        ## Do not comment out for production cases.
+        # restart: always
+        ports:
+            - "8081:80"
+            ## Deploy case.
+            # - "80:80"
+        networks:
+            - room_network
+    # mysql:
+    #     container_name: room_management_mysql
+    #     build: ./mysql
+    #     volumes:
+    #         - ./mysql/db:/docker-entrypoint-initdb.d
+    #     environment:
+    #         MYSQL_ROOT_PASSWORD: my-secret-pw
+    #         MYSQL_DATABASE: production_db
+    #         MYSQL_USER: gopher
+    #         MYSQL_PASSWORD: setsetset
+    #     networks:
+    #         - room_network
+networks:
+    room_network:
+        external: true
