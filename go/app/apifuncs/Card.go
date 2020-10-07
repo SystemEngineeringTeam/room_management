@@ -4,16 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
-type uidJSON struct {
+type recCardPostData struct {
 	UID string `json:"uid"`
-}
-
-type resCardPost struct {
-	Status string `json:"status"`
 }
 
 //CardResponse is /card no post ni taisuru func
@@ -25,7 +20,7 @@ func CardResponse(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var rec uidJSON
+	var rec recCardPostData
 
 	if err := json.Unmarshal(jsonBytes, &rec); err != nil {
 		w.WriteHeader(http.StatusServiceUnavailable)
@@ -34,29 +29,19 @@ func CardResponse(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodPost {
-		status := rec.UID //ありえない代入ですが、uidをどこかで使わないといけないので…
+		var status string
+
 		//do NANI
+
 		if false {
-			status = "unabailable"
+			status = `{"status":"unabailable"}`
 		} else {
-			status = "available"
+			status = `{"status":"available"}`
 		}
-
-		var res resCardPost
-		res.Status = status
-
-		jsonBytes, err := json.Marshal(res)
-		if err != nil {
-			w.WriteHeader(http.StatusServiceUnavailable)
-			log.Fatal(err)
-			return
-		}
-
-		jsonString := string(jsonBytes)
 
 		w.WriteHeader(http.StatusOK)
 		r.Header.Set("Content-Type", "application/json")
 
-		fmt.Fprintln(w, jsonString)
+		fmt.Fprintln(w, status)
 	}
 }
