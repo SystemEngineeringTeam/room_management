@@ -18,7 +18,7 @@ type recUserPostData struct {
 type entryPersonInfo struct {
 	StudentNumber string `json:"StudentNumber"`
 	Name          string `json:"Name"`
-	EntryDatetime string `json:"EntryDatetime`
+	EntryDatetime string `json:"EntryDatetime"`
 }
 
 //UserResponse is /user ni taisuru func
