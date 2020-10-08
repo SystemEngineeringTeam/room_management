@@ -46,7 +46,8 @@ func ToggleEntryORExit(uid string) error {
 	if isEntry.Valid {
 		nextValue = 1 - isEntry.Int64
 	} else {
-		nextValue = 1
+		log.Printf("isEntry is NULL")
+		return nil
 	}
 
 	_, err = db.Exec("update users set isEntry=? where exists(select * from cards where users.id=cards.user_id and uid=?)", nextValue, uid)
