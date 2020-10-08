@@ -13,7 +13,7 @@ var db *sql.DB
 func init() {
 	var err error
 
-	db, err = sql.Open("mysql", "gopher:setsetset@tcp(vol1_mysql:3306)/production_db")
+	db, err = sql.Open("mysql", "gopher:setsetset@tcp(room_management_mysql:3306)/production_db")
 	if err != nil {
 		pc, file, line, _ := runtime.Caller(0)
 		f := runtime.FuncForPC(pc)

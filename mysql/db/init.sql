@@ -18,7 +18,7 @@ create table users(
 create table cards(
     id int auto_increment primary key not null,
     uid varchar(45) not null,
-    user_id int not null,
+    user_id int,
     foreign key (user_id) references users(id) on delete cascade
 );
 
