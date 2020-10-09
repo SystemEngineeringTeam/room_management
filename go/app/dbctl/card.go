@@ -2,6 +2,7 @@ package dbctl
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 	"runtime"
 )
@@ -23,6 +24,11 @@ func IsCardRegistered(uid string) (bool, error) {
 
 	if count == 1 {
 		return true, nil
+	} else if count > 1 {
+		log.Printf("ERROR: the same UID")
+		log.Printf("The same UID card exists.")
+		log.Printf("Please check the cards table.")
+		return true, errors.New("ERROR: the same UID")
 	}
 	return false, nil
 }
