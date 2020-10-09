@@ -26,6 +26,7 @@ create table logs(
     id int auto_increment primary key not null,
     cards_id int not null,
     card_read_datetime datetime,
+    isEntry tinyint(1),
     foreign key (cards_id) references cards(id) on delete cascade
 );
 
@@ -45,6 +46,6 @@ values
     (1,"1 2 3 4",1);
 
 insert into
-    logs(id,cards_id,card_read_datetime)
+    logs(id,cards_id,card_read_datetime,isEntry)
 values
-    (1,1,Now());
+    (1,1,Now(),1);
