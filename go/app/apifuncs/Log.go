@@ -7,12 +7,6 @@ import (
 	"net/http"
 )
 
-type logInfo struct {
-	StudentNumber    string `json:"StudentNumber"`
-	Name             string `json:"Name"`
-	CardReadDatetime string `json:"CardReadDatetime"`
-}
-
 //LogResponse is /log ni taisuru func
 func LogResponse(w http.ResponseWriter, r *http.Request) {
 	var logInfos []logInfo
