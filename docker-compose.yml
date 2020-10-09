@@ -31,6 +31,8 @@ services:
             MYSQL_PASSWORD: setsetset
         networks:
             - room_network
+        security_opt:
+            - seccomp:unconfined
 networks:
     room_network:
         external: true
