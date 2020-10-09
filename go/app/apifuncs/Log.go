@@ -15,27 +15,30 @@ type logInfo struct {
 
 //LogResponse is /log ni taisuru func
 func LogResponse(w http.ResponseWriter, r *http.Request) {
-	var logInfos []logInfo
+	if r.Method == http.MethodGet {
 
-	// test process
-	logInfos = append(logInfos, logInfo{StudentNumber: "k19092", Name: "bbb", CardReadDatetime: "2030/25/19"})
-	logInfos = append(logInfos, logInfo{StudentNumber: "k30001", Name: "abc", CardReadDatetime: "2100/12/31"})
+		var logInfos []logInfo
 
-	jsonBytes, err := json.Marshal(logInfos)
-	if err != nil {
-		w.WriteHeader(http.StatusServiceUnavailable)
-		log.Fatal(err)
-		return
+		// test process
+		logInfos = append(logInfos, logInfo{StudentNumber: "k19092", Name: "bbb", CardReadDatetime: "2030/25/19"})
+		logInfos = append(logInfos, logInfo{StudentNumber: "k30001", Name: "abc", CardReadDatetime: "2100/12/31"})
+
+		jsonBytes, err := json.Marshal(logInfos)
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			log.Fatal(err)
+			return
+		}
+
+		jsonString := string(jsonBytes)
+
+		w.WriteHeader(http.StatusOK)
+		r.Header.Set("Content-Type", "application/json")
+
+		if logInfos == nil {
+			jsonString = "[]"
+		}
+
+		fmt.Fprintln(w, jsonString)
 	}
-
-	jsonString := string(jsonBytes)
-
-	w.WriteHeader(http.StatusOK)
-	r.Header.Set("Content-Type", "application/json")
-
-	if logInfos == nil {
-		jsonString = "[]"
-	}
-
-	fmt.Fprintln(w, jsonString)
 }
