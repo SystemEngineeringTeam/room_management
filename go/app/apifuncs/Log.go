@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"set1.ie.aitech.ac.jp/room_management/dbctl"
 )
 
 //LogResponse is /log ni taisuru func
 func LogResponse(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 
-		var logInfos []logInfo
+		var logInfos []dbctl.LogInfo
 
-		// test process
-		logInfos = append(logInfos, logInfo{StudentNumber: "k19092", Name: "bbb", CardReadDatetime: "2030/25/19"})
-		logInfos = append(logInfos, logInfo{StudentNumber: "k30001", Name: "abc", CardReadDatetime: "2100/12/31"})
+		logInfos, err := dbctl.GetLogInfos()
 
 		jsonBytes, err := json.Marshal(logInfos)
 		if err != nil {
