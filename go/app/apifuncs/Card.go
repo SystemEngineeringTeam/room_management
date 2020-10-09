@@ -44,17 +44,16 @@ func CardResponse(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if isCardRegistered {
-			err = dbctl.ToggleEntryORExit(rec.UID)
-		} else {
+		if !isCardRegistered {
 			err = dbctl.InsertCard(rec.UID)
+			if err != nil {
+				w.WriteHeader(http.StatusServiceUnavailable)
+				fmt.Fprintln(w, `{"status":"Unavailable"}`)
+				fmt.Println("database error(ToggleEntryORExit or InsertCard)", err)
+				return
+			}
 		}
-		if err != nil {
-			w.WriteHeader(http.StatusServiceUnavailable)
-			fmt.Fprintln(w, `{"status":"Unavailable"}`)
-			fmt.Println("database error(ToggleEntryORExit or InsertCard)", err)
-			return
-		}
+
 		//log insert
 		err = dbctl.InsertLog(rec.UID)
 		if err != nil {
