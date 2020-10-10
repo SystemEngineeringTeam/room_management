@@ -6,20 +6,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"set1.ie.aitech.ac.jp/room_management/dbctl"
 )
-
-type recUserPostData struct {
-	StudentNumber string `json:"StudentNumber"`
-	Email         string `json:"Email"`
-	Name          string `json:"Name"`
-	UID           string `json:"UID"`
-}
-
-type entryPersonInfo struct {
-	StudentNumber string `json:"StudentNumber"`
-	Name          string `json:"Name"`
-	EntryDatetime string `json:"EntryDatetime"`
-}
 
 //UserResponse is /user ni taisuru func
 func UserResponse(w http.ResponseWriter, r *http.Request) {
@@ -31,7 +20,7 @@ func UserResponse(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		var rec recUserPostData
+		var rec dbctl.RecUserPostData
 
 		if err := json.Unmarshal(jsonBytes, &rec); err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
@@ -43,7 +32,7 @@ func UserResponse(w http.ResponseWriter, r *http.Request) {
 
 		//do HOGE
 
-		if false {
+		if err := dbctl.Register(rec); err != nil {
 			status = `{"status":"unabailable"}`
 		} else {
 			status = `{"status":"available"}`
@@ -55,11 +44,13 @@ func UserResponse(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, status)
 
 	} else if r.Method == http.MethodGet {
-		var students []entryPersonInfo
-
-		// test process
-		students = append(students, entryPersonInfo{StudentNumber: "k19092", Name: "bbb", EntryDatetime: "2030/25/19"})
-		students = append(students, entryPersonInfo{StudentNumber: "k30001", Name: "abc", EntryDatetime: "2100/12/31"})
+		var students []dbctl.EntryPersonInfo
+		students, err := dbctl.GetCurrentEntryMembers()
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			log.Fatal(err)
+			return
+		}
 
 		jsonBytes, err := json.Marshal(students)
 		if err != nil {
