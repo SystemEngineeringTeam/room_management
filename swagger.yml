@@ -1,0 +1,123 @@
+swagger: '2.0'
+info:
+  version: "1.1"
+  title: '入退室管理 '
+  description: '部室の入退室管理用API'
+tags: 
+- name: "card"
+- name: "user"
+- name: "log"
+
+paths:
+  /card:
+    post:
+      tags:
+      - "card"
+      summary: "カードのUIDを受け取り，状態を返す"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema: 
+            type: "object"
+            properties:
+              UID:
+                type: "string"
+                format: "string"
+      responses:
+        200:
+          description: 'response'
+          schema: 
+            type: 'object'
+            properties:
+              Status:
+                type: 'string'
+                format: '[0-9]*3 [0-9]*3 [0-9]*3'
+  /user:
+    get:
+      tags:
+      - "user"
+      summary: "今いるユーザーの一覧を受け取る"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: 'response'
+          schema: 
+            type: 'array'
+            items: 
+              type: 'object'
+              properties:
+                Name:
+                  type: string
+                StudentNumber:
+                  type: string
+                EntryDatetime:
+                  type: string
+    post:
+      tags:
+      - 'user'
+      summary: "ユーザーとカードを紐づける"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          description: 'response'
+          schema: 
+            type: 'object'
+            properties:
+              StudentNumber:
+                type: string
+              Email:
+                type: string
+              Password:
+                type: string
+              Name:
+                type: string
+              UID:
+                type: string
+      responses:
+        200:
+          description: OK
+  
+  /log:
+    get:
+      tags:
+      - "log"
+      summary: "ユーザーの入退室履歴を受け取る"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: 'response'
+          schema: 
+            type: 'array'
+            items: 
+              type: 'object'
+              properties:
+                StudentNumber:
+                  type: string
+                Name:
+                  type: string
+                CardReadDatetime:
+                  type: string
+                UID:
+                  type: string
+                EntryOrExit:
+                  type: boolean
