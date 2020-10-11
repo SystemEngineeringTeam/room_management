@@ -2,13 +2,13 @@ use production_db;
 
 create table emails(
     id int auto_increment primary key not null,
-    email varchar(45) not null,
+    email varchar(45) unique not null,
     password varchar(256) not null
 );
 
 create table users(
     id int auto_increment primary key not null,
-    student_number varchar(10) not null,
+    student_number varchar(10) unique not null,
     name varchar(45) not null,
     isEntry tinyint(1),
     email_id int,

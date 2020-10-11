@@ -87,3 +87,39 @@ func GetCurrentEntryMembers() ([]EntryPersonInfo, error) {
 
 	return users, nil
 }
+
+// CheckEmailAndStudentNumberRegistered はEmailとStudentNumberが登録済みかどうか確認する関数
+func CheckEmailAndStudentNumberRegistered(StudentNumber string, Email string) (bool, error) {
+	rows, err := db.Query("select count(*) from users where student_number=?", StudentNumber)
+	if err != nil {
+		pc, file, line, _ := runtime.Caller(0)
+		f := runtime.FuncForPC(pc)
+		log.Printf(errFormat, err, f.Name(), file, line)
+		return false, err
+	}
+
+	var count int
+	rows.Next()
+	rows.Scan(&count)
+
+	if count != 0 {
+		return true, nil
+	}
+
+	rows, err = db.Query("select count(*) from emails where email=?", Email)
+	if err != nil {
+		pc, file, line, _ := runtime.Caller(0)
+		f := runtime.FuncForPC(pc)
+		log.Printf(errFormat, err, f.Name(), file, line)
+		return false, err
+	}
+
+	rows.Next()
+	rows.Scan(&count)
+
+	if count != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
