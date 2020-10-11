@@ -48,7 +48,7 @@ func Register(u RecUserPostData) error {
 		return err
 	}
 
-	_, err = db.Exec("update cards set user_id=(select users.id from users,emails where email=? and emails.id=users.email_id) where uid=?;", u.Email, u.UID)
+	_, err = db.Exec("update cards set user_id=(select id from users where student_number=?) where uid=?;", u.StudentNumber, u.UID)
 	if err != nil {
 		pc, file, line, _ := runtime.Caller(0)
 		f := runtime.FuncForPC(pc)
@@ -61,7 +61,7 @@ func Register(u RecUserPostData) error {
 
 // GetCurrentEntryMembers は今いる人の一覧を返す関数
 func GetCurrentEntryMembers() ([]EntryPersonInfo, error) {
-	rows, err := db.Query("select student_number,name from users where isEntry=1")
+	rows, err := db.Query("select student_number, name, max(card_read_datetime) from users, cards, logs where users.id = cards.user_id and logs.cards_id = cards.id and users.isEntry = 1 group by student_number, name")
 	if err != nil {
 		pc, file, line, _ := runtime.Caller(0)
 		f := runtime.FuncForPC(pc)
@@ -74,31 +74,12 @@ func GetCurrentEntryMembers() ([]EntryPersonInfo, error) {
 
 	for rows.Next() {
 		tmp := EntryPersonInfo{}
-		rows.Scan(&tmp.StudentNumber, &tmp.Name)
+		rows.Scan(&tmp.StudentNumber, &tmp.Name, &tmp.EntryDatetime)
 		if err != nil {
 			pc, file, line, _ := runtime.Caller(0)
 			f := runtime.FuncForPC(pc)
 			log.Printf(errFormat, err, f.Name(), file, line)
 			return nil, err
-		}
-
-		datetime, err := db.Query("select card_read_datetime from logs where cards_id=(select cards.id from cards,users where name=? and student_number=? and isEntry=1 and cards.user_id=users.id) order by card_read_datetime desc limit 1;", tmp.Name, tmp.StudentNumber)
-		if err != nil {
-			pc, file, line, _ := runtime.Caller(0)
-			f := runtime.FuncForPC(pc)
-			log.Printf(errFormat, err, f.Name(), file, line)
-			return nil, err
-		}
-		defer datetime.Close()
-
-		for datetime.Next() {
-			datetime.Scan(&tmp.EntryDatetime)
-			if err != nil {
-				pc, file, line, _ := runtime.Caller(0)
-				f := runtime.FuncForPC(pc)
-				log.Printf(errFormat, err, f.Name(), file, line)
-				return nil, err
-			}
 		}
 
 		users = append(users, tmp)
