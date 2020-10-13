@@ -30,12 +30,22 @@ func UserResponse(w http.ResponseWriter, r *http.Request) {
 
 		var status string
 
-		//do HOGE
+		checkResult, err := dbctl.CheckEmailAndStudentNumberRegistered(rec.StudentNumber, rec.Email)
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			fmt.Println("database error(CheckEmailAndStudentNumberRegistered)")
+			return
+		}
 
-		if err := dbctl.Register(rec); err != nil {
+		if checkResult {
 			status = `{"status":"unabailable"}`
+			fmt.Println("ERROR: The user already exists.(Duplicate student number or Email)")
 		} else {
-			status = `{"status":"available"}`
+			if err := dbctl.Register(rec); err != nil {
+				status = `{"status":"unabailable"}`
+			} else {
+				status = `{"status":"available"}`
+			}
 		}
 
 		w.WriteHeader(http.StatusOK)
