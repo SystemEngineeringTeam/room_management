@@ -113,6 +113,7 @@ func CheckEmailAndStudentNumberRegistered(StudentNumber string, Email string) (b
 		log.Printf(errFormat, err, f.Name(), file, line)
 		return false, err
 	}
+	defer rows.Close()
 
 	rows.Next()
 	rows.Scan(&count)
