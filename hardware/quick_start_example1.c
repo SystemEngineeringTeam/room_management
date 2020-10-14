@@ -11,7 +11,8 @@
 
 // $ gcc -o quick_start_example1 quick_start_example1.c -lnfc
 
-#define url "https://www.tikuwa.monster/echo/"
+#define URL "https://www.tikuwa.monster/echo/"
+#define SLEEP_TIME (5)
 
 void sendUid(char uid[])
 {
@@ -28,7 +29,7 @@ void sendUid(char uid[])
     /* First set the URL that is about to receive our POST. This URL can
        just as well be a https:// URL if that is what should receive the
        data. */ 
-    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_URL, URL);
     /* Now specify the POST data */ 
 
     char sendUid[255] = "{\"uid\":\"";
@@ -84,7 +85,7 @@ static void print_hex(const uint8_t *pbtData, const size_t szBytes)
 
 int main(int argc, const char *argv[])
 {
-  int sleepTime = 5;
+  int sleepTime = SLEEP_TIME;
   struct stat file_info;
   curl_off_t speed_upload, total_time;
 
