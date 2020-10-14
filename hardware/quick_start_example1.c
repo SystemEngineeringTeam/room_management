@@ -67,7 +67,10 @@ static void print_hex(const uint8_t *pbtData, const size_t szBytes)
   for (szPos = 0; szPos < szBytes; szPos++) {
     // int hoge =pbtData[szPos];
 
-     sprintf(hoge,"%03d ",pbtData[szPos]);
+     sprintf(hoge,"%03d",pbtData[szPos]);
+     if(szPos != szBytes){
+       strcat(uid," ");
+     }
      strcat(uid, hoge);
     // uid[szPos*2] = hoge[0];
     // uid[szPos*2+1] = hoge[1];
