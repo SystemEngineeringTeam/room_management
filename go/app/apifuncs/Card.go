@@ -15,6 +15,12 @@ type recCardPostData struct {
 
 //CardResponse is /card no post ni taisuru func
 func CardResponse(w http.ResponseWriter, r *http.Request) {
+
+	//セキュリティ設定
+	w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+
 	r.Header.Set("Content-Type", "application/json")
 	if r.Method == http.MethodPost {
 
