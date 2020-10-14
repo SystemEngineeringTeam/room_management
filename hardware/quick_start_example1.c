@@ -4,26 +4,86 @@
 #include <string.h>
 #include <math.h>
 #include <unistd.h>
+#include <curl/curl.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <curl/curl.h>
+
+// $ gcc -o quick_start_example1 quick_start_example1.c -lnfc
+
+#define url "https://www.tikuwa.monster/echo/"
+
+void sendUid(char uid[])
+{
+
+  CURL *curl;
+  CURLcode res;
+ 
+  /* In windows, this will init the winsock stuff */ 
+  curl_global_init(CURL_GLOBAL_ALL);
+ 
+  /* get a curl handle */ 
+  curl = curl_easy_init();
+  if(curl) {
+    /* First set the URL that is about to receive our POST. This URL can
+       just as well be a https:// URL if that is what should receive the
+       data. */ 
+    curl_easy_setopt(curl, CURLOPT_URL, url);
+    /* Now specify the POST data */ 
+
+    char sendUid[255] = "{\"uid\":\"";
+    strcat(sendUid,uid);
+    strcat(sendUid,"\"}");
+
+
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, sendUid);
+ 
+    /* Perform the request, res will get the return code */ 
+    res = curl_easy_perform(curl);
+    /* Check for errors */ 
+    if(res != CURLE_OK)
+      fprintf(stderr, "curl_easy_perform() failed: %s\n",
+              curl_easy_strerror(res));
+ 
+    /* always cleanup */ 
+    curl_easy_cleanup(curl);
+  }
+  curl_global_cleanup();
+}
 
 static void print_hex(const uint8_t *pbtData, const size_t szBytes)
 {
   size_t  szPos;
-  char uid[szBytes];
+  char hoge[5];
+  char uid[szBytes*5];
+
+  for (int i = 0; i < szBytes*5; i++)
+  {
+    uid[i] = '\0';
+  }
+  
+
 
   for (szPos = 0; szPos < szBytes; szPos++) {
-    uid[szPos] = (char)pbtData[szPos];
+    // int hoge =pbtData[szPos];
 
-    printf("%d ", pbtData[szPos]);
+     sprintf(hoge,"%03d ",pbtData[szPos]);
+     strcat(uid, hoge);
+    // uid[szPos*2] = hoge[0];
+    // uid[szPos*2+1] = hoge[1];
+
+    printf("%03d ", pbtData[szPos]);
   }
   printf("\n");
-  printf("charで表示するよ…\n");
-  printf("%s",uid);
-  printf("\n");
+  printf("%s\n",uid);
+  sendUid(uid);
 }
 
 int main(int argc, const char *argv[])
 {
   int sleepTime = 5;
+  struct stat file_info;
+  curl_off_t speed_upload, total_time;
 
   nfc_device *pnd;
   nfc_target nt;
@@ -70,7 +130,9 @@ int main(int argc, const char *argv[])
     //遅延処理
     sleep(sleepTime);
   }
+
   nfc_close(pnd);
   nfc_exit(context);
   exit(EXIT_SUCCESS);
 }
+
