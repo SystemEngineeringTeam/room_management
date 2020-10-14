@@ -12,6 +12,11 @@ import (
 
 //UserResponse is /user ni taisuru func
 func UserResponse(w http.ResponseWriter, r *http.Request) {
+	//セキュリティ設定
+	w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+
 	if r.Method == http.MethodPost {
 		jsonBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -30,12 +35,22 @@ func UserResponse(w http.ResponseWriter, r *http.Request) {
 
 		var status string
 
-		//do HOGE
+		checkResult, err := dbctl.CheckEmailAndStudentNumberRegistered(rec.StudentNumber, rec.Email)
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			fmt.Println("database error(CheckEmailAndStudentNumberRegistered)")
+			return
+		}
 
-		if err := dbctl.Register(rec); err != nil {
+		if checkResult {
 			status = `{"status":"unabailable"}`
+			fmt.Println("ERROR: The user already exists.(Duplicate student number or Email)")
 		} else {
-			status = `{"status":"available"}`
+			if err := dbctl.Register(rec); err != nil {
+				status = `{"status":"unabailable"}`
+			} else {
+				status = `{"status":"available"}`
+			}
 		}
 
 		w.WriteHeader(http.StatusOK)

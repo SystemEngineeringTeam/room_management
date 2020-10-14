@@ -20,46 +20,14 @@
             <button @click="getjson">json取得</button>
 
     </div>
-    <!-- <script>
-        // // jsonの取得(/user)
-        // var reqest = new XMLHttpRequest();
-        // var userData;
-        // reqest.open('GET','/user',true);// apiに送るリクエストのURL指定
-        // reqest.responseType = 'json';
-        // reqest.onload = function () {
-        //     useData = this.response;
-        // }
-        // reqest.send();
-    </script> -->
-    <!-- <script>
-        new Vue({
-            el:"#app",
-            data:{
-                // POSTで送信するJSONの要素
-                frm:{
-                    Studentnumber:"",
-                    Email:"",
-                    Password:"",
-                    Name:"",
-                    UID:"",
-                },
-            },
-            methods:{
-                regist(){
-                    // jsonを送信する
-                    var reqPost = new XMLHttpRequest();
-                    reqPost.open('POST','/user',true);// apiに送るリクエストのURL指定
-                    reqPost.setRequestHeader('Content-Type','application/json');
-                    reqPost.send(JSON.stringify(this.frm));
-                }
-            },
-        })
-    </script> -->
 </template>
+
 <script>
+import axios from 'axios';
 export default {
   name: 'Hoge',
   data: ()=>({
+    jsonData: null,
     frm:{
       Name:'',
       Password:'',
@@ -77,18 +45,13 @@ export default {
       reqPost.send(JSON.stringify(this.frm));
     },
     getjson(){
-      // jsonの取得(/user)
-      var reqest = new XMLHttpRequest();
-      var userData;
-      reqest.open('GET','localhost:8081/user',true);// apiに送るリクエストのURL指定
-      reqest.responseType = 'json';
-      reqest.onload = function () {
-          userData = this.response;
-          window.alert(userData);
-      }
-      reqest.send();
+      axios.get('localhost:8081/user')
+      .then(response => {
+        this.jsonData =response.data;
+      }).catch((e) => {
+        alert(e);
+      });
     }
-  }
-  ,
+  },
 }
 </script>

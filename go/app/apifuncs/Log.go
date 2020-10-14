@@ -11,6 +11,12 @@ import (
 
 //LogResponse is /log ni taisuru func
 func LogResponse(w http.ResponseWriter, r *http.Request) {
+
+	//セキュリティ設定
+	w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+
 	if r.Method == http.MethodGet {
 
 		var logInfos []dbctl.LogInfo
