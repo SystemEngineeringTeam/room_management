@@ -1,20 +1,23 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <Hoge></Hoge>
-  </div>
+    <div id="app">
+        <Room></Room>
+        <Log></Log>
+    </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import Hoge from './components/hoge.vue'
+import Room from './components/inRoom.vue';
+import Log from './components/log.vue';
 
 export default {
   name: 'App',
+  data: () => ({
+    host: 'http://localhost:8081',
+    page:'room',
+  }),
   components: {
-    HelloWorld,
-    Hoge
+    Room,
+    Log
   }
 }
 </script>
