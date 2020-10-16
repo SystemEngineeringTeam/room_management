@@ -1,6 +1,5 @@
 <template>
     <div class="log">
-      {{jsonData}}
       <h1>入退室ログ(ユーザー登録)</h1>
       <table>
 				<thead>

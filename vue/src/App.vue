@@ -2,6 +2,7 @@
     <div id="app">
         <Room></Room>
         <Log></Log>
+        <!-- <component :is="currentView"></component> -->
     </div>
 </template>
 
@@ -12,12 +13,17 @@ import Log from './components/log.vue';
 export default {
   name: 'App',
   data: () => ({
-    host: 'http://localhost:8081',
-    page:'room',
+    // apiのホストアドレス
+    host: 'http://172.16.6.4',
   }),
   components: {
     Room,
     Log
+  },
+  methods:{
+    viewlog(){
+
+    }
   }
 }
 </script>
