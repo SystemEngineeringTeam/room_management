@@ -1,5 +1,6 @@
 <template>
     <div class="log">
+      {{jsonData}}
       <h1>入退室ログ(ユーザー登録)</h1>
       <table>
 				<thead>
@@ -18,7 +19,7 @@
               <div v-else>退室</div>
             </th>
             <th>
-              <div v-if="log.Name==='Hoge'">
+              <div v-if="log.Name===''">
                 <button v-on:click="register(log.uid,log.CardReadDatetime)">登録</button>
               </div>
               <div v-else>{{log.Name}}</div>
@@ -71,6 +72,11 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 	}
+  .log form{
+    display: flex;
+		flex-direction: column;
+		justify-content: center;
+  }
   .log button{
     color: #EFF;
     padding: 0.25rem 1rem;
