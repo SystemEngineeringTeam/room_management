@@ -17,7 +17,7 @@
                 <label for="pass">パスワード</label>
               </th>
               <th>
-                <input type="password" v-model="frm.Password" required>
+                <input type="text" v-model="frm.Password" required readonly>
               </th>
             </tr>
             <tr>
@@ -25,7 +25,7 @@
                 <label for="strNum">学籍番号</label>
               </th>
               <th>
-                <input type="text" id="strNum" v-model="frm.Studentnumber" required>
+                <input type="text" id="strNum" pattern="[a-z]\d{5}" :value="frm.Studentnumber" @input="frm.Studentnumber = $event.target.value;onChangeStuNum();" maxlength="6" required>
               </th>
             </tr>
             <tr>
@@ -33,14 +33,14 @@
                 <label for="Email">メアド</label>
               </th>
               <th>
-                <input type="email" id="email" v-model="frm.Email" maxlength='45' required>
+                <input type="email" id="email" v-model="frm.Email" maxlength='45' required readonly>
               </th>
             </tr>
-            <input type="hidden" v-model="frm.UID" required>
           </tbody>
         </table>
         <input class="bt" type="submit" value="登録">
       </form>
+      {{frm}}
     </div>
 </template>
 
@@ -52,7 +52,7 @@ export default {
     time:null,
     frm:{
       Name:'',
-      Password:'',
+      Password:'hoge',
       Studentnumber:'',
       Email:'',
       UID:''
@@ -60,6 +60,7 @@ export default {
   }),
   methods:{
     regist(){
+      
       // jsonを送信する
       var reqPost = new XMLHttpRequest();
       reqPost.open('POST',this.$parent.host+'/user',true);// apiに送るリクエストのURL指定
@@ -67,11 +68,15 @@ export default {
       reqPost.send(JSON.stringify(this.frm));
       location.reload(true);
     },
+    onChangeStuNum(){
+      var gstr=this.frm.Studentnumber.slice(0,1);
+      this.frm.Email=this.frm.Studentnumber +gstr+gstr+"@aitech.ac.jp";
+    }
   },
   mounted(){
     this.frm.UID=this.$parent.uid;
     this.time = this.$parent.time;
-  }
+  },
 }
 </script>
 <style>
