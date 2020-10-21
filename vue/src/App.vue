@@ -18,7 +18,7 @@ export default {
     // apiのホストアドレス
     host: 'http://172.16.6.4',
     // host: 'http://localhost:8081',
-    view:'room',
+    view:'log',
   }),
   components: {
     Room,
