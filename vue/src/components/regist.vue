@@ -63,7 +63,7 @@ export default {
       Name:'',
       Password:'hoge',
       Studentnumber:'',
-      Email:'',
+      Email:'example@aitech.ac.jp',
       UID:''
     }
   }),
@@ -79,7 +79,21 @@ export default {
     },
     onChangeStuNum(){
       var gstr=this.frm.Studentnumber.slice(0,1);
+      if(gstr.match("[A-Z]")!=null){
+        gstr=gstr.toLowerCase();
+        this.frm.Studentnumber=gstr;
+      }
+      if(gstr==''||gstr.match("[a-z]")==null){
+      this.frm.Studentnumber='';
+      this.frm.Email="example@aitech.ac.jp";
+      }else{
+        if (this.frm.Studentnumber.length>1) {
+          if(this.frm.Studentnumber.slice(-1).match("[0-9]")==null){
+            this.frm.Studentnumber=this.frm.Studentnumber.slice(0,-1);
+          }
+        }
       this.frm.Email=this.frm.Studentnumber +gstr+gstr+"@aitech.ac.jp";
+      }
     },
     hideRegist(){
       this.frm.UID=null;
