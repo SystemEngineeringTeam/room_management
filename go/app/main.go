@@ -12,6 +12,7 @@ func main() {
 	log.Print("hello world\n")
 	http.HandleFunc("/card", apifuncs.CardResponse)
 	http.HandleFunc("/user", apifuncs.UserResponse)
+	http.HandleFunc("/user/card", apifuncs.UserCardResponce)
 	http.HandleFunc("/log", apifuncs.LogResponse)
 	http.ListenAndServe(":80", nil)
 }
