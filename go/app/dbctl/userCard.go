@@ -78,7 +78,7 @@ func OrganizeLog(uid string, email string) error {
 		nextValue = 1 - isEntry.Int64
 	}
 
-	_, err = db.Exec("update logs inner join (select id, @row:=@row+1 RowNum from (select logs.id from logs inner join cards on logs.cards_id = cards.id where card_read_datetime >= ? and user_id = ? order by card_read_datetime asc) l, (select @row:=0) r) t on logs.id = t.id set isEntry = case when RowNum%2=1 then ? else ? end", oldCardReadDatetime, userID, nextValue, 1-nextValue)
+	_, err = db.Exec("update logs inner join (select id, row_number() over (order by id asc) RowNum from (select logs.id from logs inner join cards on logs.cards_id = cards.id where card_read_datetime >= ? and user_id = ? order by card_read_datetime asc) l) t on logs.id = t.id set isEntry = case when RowNum%2=1 then ? else ? end", oldCardReadDatetime, userID, nextValue, 1-nextValue)
 	if err != nil {
 		pc, file, line, _ := runtime.Caller(0)
 		f := runtime.FuncForPC(pc)
