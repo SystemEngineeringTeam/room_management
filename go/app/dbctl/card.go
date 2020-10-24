@@ -48,19 +48,7 @@ func InsertCard(uid string) error {
 
 //InsertLog is Log ni insert suru func.
 func InsertLog(uid string) error {
-	rows, err := db.Query("select id from cards where uid=?", uid)
-	if err != nil {
-		pc, file, line, _ := runtime.Caller(0)
-		f := runtime.FuncForPC(pc)
-		log.Printf(errFormat, err, f.Name(), file, line)
-		return err
-	}
-
-	var cardID int
-	rows.Next()
-	rows.Scan(&cardID)
-
-	rows, err = db.Query("select isEntry from logs where cards_id=? order by card_read_datetime desc", cardID)
+	rows, err := db.Query("select id, user_id from cards where uid=?", uid)
 	if err != nil {
 		pc, file, line, _ := runtime.Caller(0)
 		f := runtime.FuncForPC(pc)
@@ -68,6 +56,23 @@ func InsertLog(uid string) error {
 		return err
 	}
 	defer rows.Close()
+
+	var cardID int
+	var userID sql.NullString = sql.NullString{}
+	rows.Next()
+	rows.Scan(&cardID, &userID)
+
+	if userID.Valid {
+		rows, err = db.Query("select isEntry from logs, cards where logs.cards_id = cards.id and user_id in (select user_id from cards where uid = ?) order by card_read_datetime desc limit 1", uid)
+	} else {
+		rows, err = db.Query("select isEntry from logs where cards_id = ? order by card_read_datetime desc limit 1", cardID)
+	}
+	if err != nil {
+		pc, file, line, _ := runtime.Caller(0)
+		f := runtime.FuncForPC(pc)
+		log.Printf(errFormat, err, f.Name(), file, line)
+		return err
+	}
 
 	var isEntry sql.NullInt64 = sql.NullInt64{}
 	rows.Next()
