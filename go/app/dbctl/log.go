@@ -17,7 +17,7 @@ type LogInfo struct {
 
 //GetLogInfos can get log no info
 func GetLogInfos() ([]LogInfo, error) {
-	rows, err := db.Query("select logs.id, student_number, name, card_read_datetime, uid, logs.isEntry from logs, cards left outer join users on users.id=cards.user_id where logs.cards_id=cards.id order by card_read_datetime")
+	rows, err := db.Query("select logs.id, student_number, name, card_read_datetime, uid, logs.isEntry from logs, cards left outer join users on users.id=cards.user_id where logs.cards_id=cards.id order by card_read_datetime desc")
 	if err != nil {
 		pc, file, line, _ := runtime.Caller(0)
 		f := runtime.FuncForPC(pc)
