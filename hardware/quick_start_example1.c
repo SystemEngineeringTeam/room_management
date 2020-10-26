@@ -9,10 +9,14 @@
 #include <fcntl.h>
 #include <curl/curl.h>
 
+#include <wiringPi.h>
+#define pin 7
+
 // $ gcc -o quick_start_example1 quick_start_example1.c -lnfc
 
-#define URL "https://www.tikuwa.monster/echo/"
-#define SLEEP_TIME (5)
+// #define URL "https://www.tikuwa.monster/echo/"
+#define URL "http://172.16.6.4:8081/card/"
+#define SLEEP_TIME (2)
 
 // #define SENDUID_A "{\"uid\":\""
 
@@ -142,6 +146,8 @@ int main(int argc, const char *argv[])
   //送信用関数 8ko
   char sendUid[255] = "{\"uid\":\"";
 
+  wiringPiSetup () ;
+  pinMode (pin, OUTPUT) ;
 
   printf("searching...\n");
   while (1)
@@ -151,7 +157,14 @@ int main(int argc, const char *argv[])
       printf("UID:");
       //情報のポインタと数を送信してるよ
       print_hex(nt.nti.nai.abtUid, nt.nti.nai.szUidLen);
-      sleep(sleepTime);
+//      sleep(sleepTime);
+
+      for (int i = 0;i<2;i++)
+      {
+        digitalWrite (pin, HIGH) ; sleep (500) ;
+        digitalWrite (pin,  LOW) ; sleep (500) ;
+      }
+
       printf("searching...\n");
     }else{
       continue;
