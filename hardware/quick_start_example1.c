@@ -14,6 +14,8 @@
 #define URL "https://www.tikuwa.monster/echo/"
 #define SLEEP_TIME (5)
 
+// #define SENDUID_A "{\"uid\":\""
+
 void sendUid(char uid[])
 {
 
@@ -32,9 +34,12 @@ void sendUid(char uid[])
     curl_easy_setopt(curl, CURLOPT_URL, URL);
     /* Now specify the POST data */ 
 
-    char sendUid[255] = "{\"uid\":\"";
-    strcat(sendUid,uid);
-    strcat(sendUid,"\"}");
+//データ送信形式作成
+
+    char sendUid[255];
+    sprintf(sendUid,"{\"uid\":\"%s\"}",uid);
+    // strcat(sendUid,uid);
+    // strcat(sendUid,"\"}");
 
 
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, sendUid);
@@ -54,30 +59,42 @@ void sendUid(char uid[])
 
 static void print_hex(const uint8_t *pbtData, const size_t szBytes)
 {
-  size_t  szPos;
-  char hoge[5];
+  size_t szPos;
+  char hoge[32];
   char uid[szBytes*5];
 
   for (int i = 0; i < szBytes*5; i++)
   {
     uid[i] = '\0';
   }
-  
-
+  int counter=0;
+  int i=0;
 
   for (szPos = 0; szPos < szBytes; szPos++) {
-    // int hoge =pbtData[szPos];
+    
 
      sprintf(hoge,"%03d",pbtData[szPos]);
-     strcat(uid, hoge);
-     if(szPos != szBytes-1){
-       strcat(uid," ");
-     }
-    // uid[szPos*2] = hoge[0];
-    // uid[szPos*2+1] = hoge[1];
+
+    for(i = 0;i < 3;i++){
+      uid[counter]=hoge[i];
+      counter++;
+    }
+    uid[counter]=' ';
+    counter++;
+
+    //  strcat(uid, hoge);
+    //  if(szPos != szBytes-1){
+    //    strcat(uid," ");
+    //  }
+
 
     printf("%03d ", pbtData[szPos]);
   }
+
+//最後の空白を抜く
+  counter--;
+  uid[counter]='\0';
+
   printf("\n");
   printf("%s\n",uid);
   sendUid(uid);
@@ -120,19 +137,26 @@ int main(int argc, const char *argv[])
 
   const nfc_modulation nmMifare[] = {
     { .nmt = NMT_ISO14443A, .nbr = NBR_106 },
-    { .nmt = NMT_ISO14443B, .nbr = NBR_106 },
   };
+
+  //送信用関数 8ko
+  char sendUid[255] = "{\"uid\":\"";
+
+
+  printf("searching...\n");
   while (1)
   {
-   printf("searching...\n");
     if (nfc_initiator_poll_target(pnd, nmMifare, 2, 255, 2, &nt) > 0) {
         printf("以下UIDだよ\n");
       printf("UID:");
       //情報のポインタと数を送信してるよ
       print_hex(nt.nti.nai.abtUid, nt.nti.nai.szUidLen);
-    } 
+      sleep(sleepTime);
+      printf("searching...\n");
+    }else{
+      continue;
+    }
     //遅延処理
-    sleep(sleepTime);
   }
 
   nfc_close(pnd);
