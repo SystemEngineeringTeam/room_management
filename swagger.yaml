@@ -92,6 +92,32 @@ paths:
       responses:
         200:
           description: OK
+    
+  /user/newcard:
+    get:
+      tags:
+      - "user"
+      summary: "ユーザーに新しいカードを紐づける"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          description: 'response'
+          schema: 
+            type: 'object'
+            properties:
+              uid:
+                type: string
+              email:
+                type: string
+      responses:
+        200:
+          description: OK
   
   /log:
     get:
