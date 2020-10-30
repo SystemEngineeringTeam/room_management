@@ -109,6 +109,7 @@ export default {
 <style>
   .registContainer{
     left: 0;
+    
     width: 100%;
     position: fixed;
     display: flex;
