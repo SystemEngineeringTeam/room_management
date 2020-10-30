@@ -120,7 +120,7 @@ func checkLinkedUserAndCard(uid string, email string) error {
 
 //syncIsEntry is usersのisEntryを更新する関数
 func syncIsEntry(userID string) error {
-	_, err := db.Exec("update users set isEntry = (select isEntry from logs where exists (select * from cards where logs.cards_id = cards.id and users.id = ?) order by card_read_datetime desc limit 1) where id = ?", userID, userID)
+	_, err := db.Exec("update users set isEntry = (select isEntry from logs where exists (select * from cards where logs.cards_id = cards.id and user_id = ?) order by card_read_datetime desc limit 1) where id = ?", userID, userID)
 	if err != nil {
 		pc, file, line, _ := runtime.Caller(0)
 		f := runtime.FuncForPC(pc)
