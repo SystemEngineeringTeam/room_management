@@ -10,11 +10,6 @@ import (
 	"set1.ie.aitech.ac.jp/room_management/dbctl"
 )
 
-type recWeekPut struct {
-	Email string `json:"email"`
-	Day   string `json:"day"`
-}
-
 //WeekResponce is a function with regards to /week.
 func WeekResponce(w http.ResponseWriter, r *http.Request) {
 	//セキュリティ設定
@@ -85,7 +80,7 @@ func WeekResponce(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		var rec recWeekPut
+		var rec dbctl.ResetSettingData
 
 		if err := json.Unmarshal(jsonBytes, &rec); err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
@@ -94,7 +89,7 @@ func WeekResponce(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if err := dbctl.DeleteResetSetting(rec.Email, rec.Day); err != nil {
+		if err := dbctl.DeleteResetSetting(rec.Email, rec.Day, rec.IsOnce); err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Fprintln(w, `{"status":"Unavailable"}`)
 			fmt.Println("database error(DeleteResetSetting)", err)

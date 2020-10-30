@@ -64,8 +64,14 @@ func InsertResetSetting(email string, day string, isOnce bool) error {
 }
 
 //DeleteResetSetting is a function to delete a resetSetting from Week.
-func DeleteResetSetting(email string, day string) error {
-	_, err := db.Exec("delete from week where day = ? and users_id in (select users.id from users, emails where users.email_id = emails.id and email = ?)", day, email)
+func DeleteResetSetting(email string, day string, isOnce bool) error {
+	var isOnceInt int
+	if isOnce {
+		isOnceInt = 1
+	} else {
+		isOnceInt = 0
+	}
+	_, err := db.Exec("delete from week where day = ? and isOnce = ? and users_id in (select users.id from users, emails where users.email_id = emails.id and email = ?)", day, isOnceInt, email)
 	if err != nil {
 		pc, file, line, _ := runtime.Caller(0)
 		f := runtime.FuncForPC(pc)
