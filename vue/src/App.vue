@@ -16,9 +16,7 @@ export default {
   name: 'App',
   data: () => ({
     // apiのホストアドレス
-    host: 'http://172.16.6.4:8081',
-    // host: 'http://localhost:8081',
-    view:'log',
+    host: 'http://localhost:8081',
   }),
   components: {
     Room,
