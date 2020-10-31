@@ -1,6 +1,7 @@
 package dbctl
 
 import (
+	"errors"
 	"log"
 	"runtime"
 	"time"
@@ -46,6 +47,10 @@ func GetResetSettings() ([]ResetSettingData, error) {
 
 //InsertResetSetting is a function to add a resetSetting to Week.
 func InsertResetSetting(email string, day string, isOnce bool) error {
+	if err := isDayAndEmail(email, day); err != nil {
+		return err
+	}
+
 	var isOnceInt int
 	if isOnce {
 		isOnceInt = 1
@@ -65,6 +70,10 @@ func InsertResetSetting(email string, day string, isOnce bool) error {
 
 //DeleteResetSetting is a function to delete a resetSetting from Week.
 func DeleteResetSetting(email string, day string, isOnce bool) error {
+	if err := isDayAndEmail(email, day); err != nil {
+		return err
+	}
+
 	var isOnceInt int
 	if isOnce {
 		isOnceInt = 1
@@ -120,4 +129,59 @@ func deleteOnceResetSetting(day string) error {
 	}
 
 	return nil
+}
+
+func isDayAndEmail(email string, day string) error {
+	checkFlag, err := isEmailExist(email)
+	if err != nil {
+		return err
+	}
+
+	if !checkFlag {
+		log.Printf("The email does not exist.")
+		log.Printf("Please check the email you sent.")
+		return errors.New("ERROR: Email does not exist")
+	}
+
+	if !isDayFormat(day) {
+		log.Printf("Day is illegal.")
+		log.Printf("Please check the day you sent.")
+		return errors.New("ERROR: Illegal day")
+	}
+
+	return nil
+}
+
+func isDayFormat(day string) bool {
+	wdays := []string{"sun", "mon", "tue", "wed", "thu", "fri", "sat"}
+	var i int
+	for i = 0; i < 7; i++ {
+		if day == wdays[i] {
+			break
+		}
+	}
+	if i != 7 {
+		return true
+	}
+	return false
+}
+
+func isEmailExist(email string) (bool, error) {
+	rows, err := db.Query("select count(*) from emails where email = ?", email)
+	if err != nil {
+		pc, file, line, _ := runtime.Caller(0)
+		f := runtime.FuncForPC(pc)
+		log.Printf(errFormat, err, f.Name(), file, line)
+		return false, err
+	}
+	defer rows.Close()
+
+	var count int
+	rows.Next()
+	rows.Scan(&count)
+
+	if count == 1 {
+		return true, nil
+	}
+	return false, nil
 }
