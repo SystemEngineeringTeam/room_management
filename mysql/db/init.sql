@@ -30,6 +30,14 @@ create table logs(
     foreign key (cards_id) references cards(id) on delete cascade
 );
 
+create table week(
+    id int auto_increment primary key not null,
+    day varchar(45) not null,
+    isOnce tinyint(1) not null,
+    users_id int not null,
+    foreign key (users_id) references users(id) on delete cascade
+);
+
 insert into
     emails(id,email,password)
 values
@@ -49,3 +57,8 @@ insert into
     logs(id,cards_id,card_read_datetime,isEntry)
 values
     (1,1,Now(),1);
+
+insert into
+    week(id,day,isOnce,users_id)
+values
+    (1,"sun",0,1);
