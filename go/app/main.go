@@ -14,5 +14,7 @@ func main() {
 	http.HandleFunc("/user", apifuncs.UserResponse)
 	http.HandleFunc("/user/card", apifuncs.UserCardResponce)
 	http.HandleFunc("/log", apifuncs.LogResponse)
+	http.HandleFunc("/reset", apifuncs.WeekResponce)
+	// http.HandleFunc("/resetTest", apifuncs.ResetEntryFlagTest)
 	http.ListenAndServe(":80", nil)
 }
