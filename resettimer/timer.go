@@ -27,17 +27,10 @@ func getNextDate(t time.Time) time.Time {
 
 func callResetFunc(d time.Duration) {
 	timer := time.NewTimer(d)
-	func() {
-		<-timer.C // これ以下はtimerが発火するまで
-		// フラグをリセットする関数(1回目)
-		// dbctl.ResetEntryFlag()
-		timer.Reset(24 * time.Hour) // 24時間後にタイマーが再度発火するように設定
 
-		// 2回目以降はこれが呼ばれる
-		for t := range timer.C { // timer.Cはチャンネルから送られた現在時刻
-			// フラグをリセットする関数(2回目以降)
-			// dbctl.ResetEntryFlag()
-			timer.Reset(getNextDate(t).Sub(t)) // 次の日の00:00:00に発火するように設定
-		}
-	}()
+	for t := range timer.C { // timer.Cはチャンネルから送られた現在時刻
+		// フラグをリセットする関数
+		// dbctl.ResetEntryFlag()
+		timer.Reset(getNextDate(t).Sub(t)) // 次の日の00:00:00に発火するように設定
+	}
 }
