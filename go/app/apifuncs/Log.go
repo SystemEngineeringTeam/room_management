@@ -22,6 +22,11 @@ func LogResponse(w http.ResponseWriter, r *http.Request) {
 		var logInfos []dbctl.LogInfo
 
 		logInfos, err := dbctl.GetLogInfos()
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			log.Fatal(err)
+			return
+		}
 
 		jsonBytes, err := json.Marshal(logInfos)
 		if err != nil {

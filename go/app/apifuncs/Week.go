@@ -17,11 +17,17 @@ func WeekResponce(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 
+	r.Header.Set("Content-Type", "application/json")
 	if r.Method == http.MethodGet {
 
 		var resetSettings []dbctl.ResetSettingData
 
 		resetSettings, err := dbctl.GetResetSettings()
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			log.Fatal(err)
+			return
+		}
 
 		jsonBytes, err := json.Marshal(resetSettings)
 		if err != nil {
@@ -33,7 +39,6 @@ func WeekResponce(w http.ResponseWriter, r *http.Request) {
 		jsonString := string(jsonBytes)
 
 		w.WriteHeader(http.StatusOK)
-		r.Header.Set("Content-Type", "application/json")
 
 		if resetSettings == nil {
 			jsonString = "[]"
