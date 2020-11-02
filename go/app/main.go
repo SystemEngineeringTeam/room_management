@@ -4,10 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"set1.ie.aitech.ac.jp/room_management/resettimer"
-
 	_ "github.com/go-sql-driver/mysql"
 	"set1.ie.aitech.ac.jp/room_management/apifuncs"
+	"set1.ie.aitech.ac.jp/room_management/resettimer"
 )
 
 func main() {
@@ -19,7 +18,7 @@ func main() {
 	http.HandleFunc("/reset", apifuncs.WeekResponce)
 	// http.HandleFunc("/resetTest", apifuncs.ResetEntryFlagTest)
 
-	resettimer.ResetTimer()
+	go resettimer.ResetTimer()
 
 	http.ListenAndServe(":80", nil)
 }
