@@ -2,6 +2,8 @@ package resettimer
 
 import (
 	"time"
+
+	"set1.ie.aitech.ac.jp/room_management/dbctl"
 )
 
 // タイムゾーンの定義
@@ -30,7 +32,7 @@ func callResetFunc(d time.Duration) {
 
 	for t := range timer.C { // timer.Cはチャンネルから送られた現在時刻
 		// フラグをリセットする関数
-		// dbctl.ResetEntryFlag()
+		dbctl.ResetEntryFlag()
 		timer.Reset(getNextDate(t).Sub(t)) // 次の日の00:00:00に発火するように設定
 	}
 }
