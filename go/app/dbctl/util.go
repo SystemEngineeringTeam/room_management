@@ -22,3 +22,10 @@ func init() {
 		panic("Can't Open database.")
 	}
 }
+
+func changeNullStringToString(s sql.NullString) string {
+	if s.Valid {
+		return s.String
+	}
+	return ""
+}
