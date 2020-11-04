@@ -14,10 +14,21 @@ type ResetSettingData struct {
 	IsOnce bool   `json:"isOnce"`
 }
 
+//ResetSettingResponse is used by GetResetSettings.
+type ResetSettingResponse struct {
+	Day    string `json:"day"`
+	IsOnce bool   `json:"isOnce"`
+}
+
+//SingleEmail is only Email struct.
+type SingleEmail struct {
+	Email string `json:"email"`
+}
+
 //GetResetSettings is a function to get list of resetSettings.
-func GetResetSettings() ([]ResetSettingData, error) {
-	var resetSettingDatas []ResetSettingData
-	rows, err := db.Query("select day, isOnce, email from week, users, emails where week.users_id = users.id and users.email_id = emails.id")
+func GetResetSettings(email string) ([]ResetSettingResponse, error) {
+	var resetSettingDatas []ResetSettingResponse
+	rows, err := db.Query("select day, isOnce from week, users, emails where week.users_id = users.id and users.email_id = emails.id and email = ?", email)
 	if err != nil {
 		pc, file, line, _ := runtime.Caller(0)
 		f := runtime.FuncForPC(pc)
@@ -29,8 +40,7 @@ func GetResetSettings() ([]ResetSettingData, error) {
 	for rows.Next() {
 		var day string
 		var isOnce int
-		var email string
-		rows.Scan(&day, &isOnce, &email)
+		rows.Scan(&day, &isOnce)
 
 		var isOnceBool bool
 		if isOnce == 0 {
@@ -39,7 +49,7 @@ func GetResetSettings() ([]ResetSettingData, error) {
 			isOnceBool = true
 		}
 
-		resetSettingDatas = append(resetSettingDatas, ResetSettingData{Email: email, Day: day, IsOnce: isOnceBool})
+		resetSettingDatas = append(resetSettingDatas, ResetSettingResponse{Day: day, IsOnce: isOnceBool})
 	}
 
 	return resetSettingDatas, nil
