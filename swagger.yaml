@@ -201,9 +201,6 @@ paths:
               email:
                 type: "string"
                 format: "string"
-              password:
-                type: "string"
-                format: "string"
       responses:
         200:
           description: 'response'
@@ -212,8 +209,6 @@ paths:
             items: 
               type: 'object'
               properties:
-                email:
-                  type: string
                 day:
                   type: string
                 isOnce:
@@ -237,9 +232,10 @@ paths:
               email:
                 type: "string"
                 format: "string"
-              password:
-                type: "string"
-                format: "string"
+              day:
+                type: string
+              isOnce:
+                type: boolean
       responses:
         200:
           description: 'response'
@@ -268,9 +264,10 @@ paths:
               email:
                 type: "string"
                 format: "string"
-              password:
-                type: "string"
-                format: "string"
+              day:
+                type: string
+              isOnce:
+                type: boolean
       responses:
         200:
           description: 'response'
