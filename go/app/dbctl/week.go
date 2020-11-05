@@ -9,20 +9,20 @@ import (
 
 //ResetSettingData is one struct in a reset setting.
 type ResetSettingData struct {
-	Email  string `json:"email"`
-	Day    string `json:"day"`
-	IsOnce bool   `json:"isOnce"`
+	Email  string `json:"Email"`
+	Day    string `json:"Day"`
+	IsOnce bool   `json:"IsOnce"`
 }
 
 //ResetSettingResponse is used by GetResetSettings.
 type ResetSettingResponse struct {
-	Day    string `json:"day"`
-	IsOnce bool   `json:"isOnce"`
+	Day    string `json:"Day"`
+	IsOnce bool   `json:"IsOnce"`
 }
 
 //SingleEmail is only Email struct.
 type SingleEmail struct {
-	Email string `json:"email"`
+	Email string `json:"Email"`
 }
 
 //GetResetSettings is a function to get list of resetSettings.
@@ -163,7 +163,7 @@ func isDayAndEmail(email string, day string) error {
 }
 
 func isDayFormat(day string) bool {
-	wdays := []string{"sun", "mon", "tue", "wed", "thu", "fri", "sat"}
+	wdays := []string{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"}
 	var i int
 	for i = 0; i < 7; i++ {
 		if day == wdays[i] {

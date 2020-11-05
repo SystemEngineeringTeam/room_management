@@ -166,10 +166,10 @@ paths:
           schema:
             type: "object"
             properties:
-              email:
+              Email:
                 type: "string"
                 format: "string"
-              password:
+              Password:
                 type: "string"
                 format: "string"
       responses:
@@ -178,9 +178,15 @@ paths:
           schema:
             type: 'object'
             properties:
-              Status:
-                type: 'string'
-                format: 'success'
+              Name:
+                type: "string"
+                format: "string"
+              StudentNumber:
+                type: "string"
+                format: "string"
+              Email:
+                type: "string"
+                format: "string"
   /reset:
     get:
       tags:
@@ -198,7 +204,7 @@ paths:
           schema:
             type: "object"
             properties:
-              email:
+              Email:
                 type: "string"
                 format: "string"
       responses:
@@ -209,9 +215,9 @@ paths:
             items: 
               type: 'object'
               properties:
-                day:
+                Day:
                   type: string
-                isOnce:
+                IsOnce:
                   type: boolean
     post:
       tags:
@@ -229,12 +235,12 @@ paths:
           schema:
             type: "object"
             properties:
-              email:
+              Email:
                 type: "string"
                 format: "string"
-              day:
+              Day:
                 type: string
-              isOnce:
+              IsOnce:
                 type: boolean
       responses:
         200:
@@ -261,12 +267,12 @@ paths:
           schema:
             type: "object"
             properties:
-              email:
+              Email:
                 type: "string"
                 format: "string"
-              day:
+              Day:
                 type: string
-              isOnce:
+              IsOnce:
                 type: boolean
       responses:
         200:
