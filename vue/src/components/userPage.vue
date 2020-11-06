@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'User',
   data: ()=>({
@@ -46,7 +48,6 @@ export default {
       Email:'',
       Password:'hoge',
     },
-    resp:null,
   }),
   methods:{
     onChangeStuNum(){
@@ -68,16 +69,22 @@ export default {
       }
     },
     loginSubmit(){
-      var reqPost = new XMLHttpRequest();
-      reqPost.open('POST',this.$parent.host+'/login',true);// apiに送るリクエストのURL指定
-      reqPost.setRequestHeader('Content-Type','application/json');
-      reqPost.onload=()=>{
-        this.resp=JSON.parse(reqPost.response);
-        console.log(reqPost.response);
-      }
-      reqPost.send(JSON.stringify(this.frm));
+      // ---XMLHttpRequestで試す
+      // var reqPost = new XMLHttpRequest();
+      // reqPost.open('POST',this.$parent.host+'/login',true);// apiに送るリクエストのURL指定
+      // reqPost.setRequestHeader('Content-Type','application/json');
+      // reqPost.onload=()=>{
+      //   this.jsonData=JSON.parse(reqPost.response);
+      // }
+      // reqPost.send(JSON.stringify(this.frm));
 
-      // location.reload(true);
+      axios.post(this.$parent.host+'/login',this.frm)
+			.then(response => {
+				this.jsonData =response.data;
+			}).catch((e) => {
+				alert(e);
+			});
+
     },
   },
 }

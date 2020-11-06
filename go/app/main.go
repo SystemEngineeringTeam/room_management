@@ -16,6 +16,7 @@ func main() {
 	http.HandleFunc("/user/card", apifuncs.UserCardResponce)
 	http.HandleFunc("/log", apifuncs.LogResponse)
 	http.HandleFunc("/reset", apifuncs.WeekResponce)
+	http.HandleFunc("/login", apifuncs.Login)
 	// http.HandleFunc("/resetTest", apifuncs.ResetEntryFlagTest)
 
 	go resettimer.ResetTimer()

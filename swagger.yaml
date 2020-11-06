@@ -7,6 +7,8 @@ tags:
 - name: "card"
 - name: "user"
 - name: "log"
+- name: "login"
+- name: "reset"
 
 paths:
   /card:
@@ -93,7 +95,7 @@ paths:
         200:
           description: OK
     
-  /user/newcard:
+  /user/card:
     get:
       tags:
       - "user"
@@ -147,3 +149,137 @@ paths:
                   type: string
                 EntryOrExit:
                   type: boolean
+  /login:
+    post:
+      tags:
+      - "login"
+      summary: "メールアドレスとパスワードを使ってログインする"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              Email:
+                type: "string"
+                format: "string"
+              Password:
+                type: "string"
+                format: "string"
+      responses:
+        200:
+          description: 'response'
+          schema:
+            type: 'object'
+            properties:
+              Name:
+                type: "string"
+                format: "string"
+              StudentNumber:
+                type: "string"
+                format: "string"
+              Email:
+                type: "string"
+                format: "string"
+  /reset:
+    get:
+      tags:
+      - "reset"
+      summary: "ユーザのリセット予定を受け取る"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              Email:
+                type: "string"
+                format: "string"
+      responses:
+        200:
+          description: 'response'
+          schema: 
+            type: 'array'
+            items: 
+              type: 'object'
+              properties:
+                Day:
+                  type: string
+                IsOnce:
+                  type: boolean
+    post:
+      tags:
+      - "reset"
+      summary: "しない日を設定"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              Email:
+                type: "string"
+                format: "string"
+              Day:
+                type: string
+              IsOnce:
+                type: boolean
+      responses:
+        200:
+          description: 'response'
+          schema:
+            type: 'object'
+            properties:
+              Status:
+                type: 'string'
+                format: 'success'
+    put:
+      tags:
+      - "reset"
+      summary: "リセットする日を設定"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              Email:
+                type: "string"
+                format: "string"
+              Day:
+                type: string
+              IsOnce:
+                type: boolean
+      responses:
+        200:
+          description: 'response'
+          schema:
+            type: 'object'
+            properties:
+              Status:
+                type: 'string'
+                format: 'success'
