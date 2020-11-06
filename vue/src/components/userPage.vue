@@ -3,8 +3,9 @@
       <h1>ユーザー情報</h1>
       <div class="loginContainer" v-if="!logined">
         <form @submit.prevent="loginSubmit">
+          <h2>ログイン</h2>
+          <h3 v-if="errorMessage!==''">{{errorMessage}}</h3>
           <table>
-            <h2>ログイン</h2>
             <thead></thead>
             <tbody>
               <tr>
@@ -12,8 +13,8 @@
                   <label for="strNum">学籍番号</label>
                 </th>
                 <th>
-                  <input type="text" id="strNum" pattern="[a-z]\d{5}" :value="Studentnumber" @input="Studentnumber = $event.target.value;onChangeStuNum();" maxlength="6" required>
-                  <input type="hidden" id="email" v-model="frm.Email" maxlength='45' required readonly>
+                  <input type="text" id="strNum" pattern="[a-z]\d{5}" :value="loginData.Studentnumber" @input="loginData.Studentnumber = $event.target.value;onChangeStuNum();" maxlength="6" required>
+                  <input type="hidden" id="email" v-model="loginData.frm.Email" maxlength='45' required readonly>
                 </th>
               </tr>
               <tr>
@@ -21,7 +22,7 @@
                   <label for="pass">パスワード</label>
                 </th>
                 <th>
-                  <input type="text" v-model="frm.Password" required readonly>
+                  <input type="text" v-model="loginData.frm.Password" required readonly>
                 </th>
               </tr>
             </tbody>
@@ -29,8 +30,30 @@
           <input class="bt" type="submit" value="登録">
         </form>
       </div>
-      <div v-else>
-        
+      <div v-else class="userPageinner">
+        <table>
+          <thead></thead>
+          <tbody>
+            <tr>
+              <th>名前</th>
+              <th>
+                {{userData.Name}}
+              </th>
+            </tr>
+            <tr>
+              <th>学籍番号</th>
+              <th>
+                {{userData.StudentNumber}}
+              </th>
+            </tr>
+            <tr>
+              <th>メアド</th>
+              <th>
+                {{userData.Email}}
+              </th>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 </template>
@@ -42,48 +65,48 @@ export default {
   name: 'User',
   data: ()=>({
     jsonData: null,
+    userData:null,
     logined:false,
-    Studentnumber:'',
-    frm:{
-      Email:'',
-      Password:'hoge',
+    loginData:{
+      Studentnumber:'',
+      frm:{
+        Email:'',
+        Password:'hoge',
+      },
     },
+    errorMessage:'',
   }),
   methods:{
     onChangeStuNum(){
-      var gstr=this.Studentnumber.slice(0,1);
+      var gstr=this.loginData.Studentnumber.slice(0,1);
       if(gstr.match("[A-Z]")!=null){
         gstr=gstr.toLowerCase();
-        this.Studentnumber=gstr;
+        this.loginData.Studentnumber=gstr;
       }
       if(gstr==''||gstr.match("[a-z]")==null){
-      this.Studentnumber='';
-      this.frm.Email="example@aitech.ac.jp";
+      this.loginData.Studentnumber='';
+      this.loginData.frm.Email="example@aitech.ac.jp";
       }else{
-        if (this.Studentnumber.length>1) {
-          if(this.Studentnumber.slice(-1).match("[0-9]")==null){
-            this.Studentnumber=this.Studentnumber.slice(0,-1);
+        if (this.loginData.Studentnumber.length>1) {
+          if(this.loginData.Studentnumber.slice(-1).match("[0-9]")==null){
+            this.loginData.Studentnumber=this.loginData.Studentnumber.slice(0,-1);
           }
         }
-      this.frm.Email=this.Studentnumber +gstr+gstr+"@aitech.ac.jp";
+      this.loginData.frm.Email=this.loginData.Studentnumber +gstr+gstr+"@aitech.ac.jp";
       }
     },
     loginSubmit(){
-      // ---XMLHttpRequestで試す
-      // var reqPost = new XMLHttpRequest();
-      // reqPost.open('POST',this.$parent.host+'/login',true);// apiに送るリクエストのURL指定
-      // reqPost.setRequestHeader('Content-Type','application/json');
-      // reqPost.onload=()=>{
-      //   this.jsonData=JSON.parse(reqPost.response);
-      // }
-      // reqPost.send(JSON.stringify(this.frm));
-
-      axios.post(this.$parent.host+'/login',this.frm)
+      axios.post(this.$parent.host+'/login',this.loginData.frm)
 			.then(response => {
-				this.jsonData =response.data;
+        this.userData =response.data;
+        if(this.userData.Name!==''){
+          this.logined=true;
+        }else{
+          this.errorMessage="ログインに失敗しました";
+        }
 			}).catch((e) => {
 				alert(e);
-			});
+      });
 
     },
   },
@@ -119,5 +142,10 @@ export default {
   .userPage .bt:hover{
     background-color: #EA0;
     border-color: #D80;
+  }
+  .userPageinner{
+    display: flex;
+		flex-direction: column;
+		justify-content: center;
   }
 </style>

@@ -9,8 +9,14 @@ import (
 	"set1.ie.aitech.ac.jp/room_management/dbctl"
 )
 
-// Login is
+// Login is a func to login
 func Login(w http.ResponseWriter, r *http.Request) {
+	//セキュリティ設定
+	w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+
+	r.Header.Set("Content-Type", "application/json")
 	if r.Method == http.MethodPost {
 
 		jsonBytes, err := ioutil.ReadAll(r.Body)
