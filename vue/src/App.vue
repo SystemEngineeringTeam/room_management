@@ -3,6 +3,7 @@
       <div class="buttonsContainer">
         <button id="btLog" v-on:click="viewLog">ログ</button>
         <button id="btRoom" v-on:click="viewRoom">入室者一覧</button>
+        <button id="btUser" v-on:click="viewUser">ユーザー情報</button>
       </div>
       <component :is="view"></component>
     </div>
@@ -11,6 +12,7 @@
 <script>
 import Room from './components/inRoom.vue';
 import Log from './components/log.vue';
+import User from './components/userPage.vue';
 
 export default {
   name: 'App',
@@ -22,15 +24,25 @@ export default {
   }),
   components: {
     Room,
-    Log
+    Log,
+    User
   },
   methods:{
     viewLog(){
       this.view='log';
+      document.title = 'ログ';
     },
     viewRoom(){
       this.view='room';
+      document.title = '入室者一覧';
+    },
+    viewUser(){
+      this.view='user';
+      document.title = 'ユーザー情報';
     }
+  },
+  mounted(){
+      document.title = 'ログ';
   }
 }
 </script>
@@ -66,7 +78,11 @@ button:focus{
   border-color: #0AD;
 }
 #btRoom{
-  background-color: #CCC;
-  border-color: #AAA;
+  background-color: #5EA;
+  border-color: #0C5;
+}
+#btUser{
+	background-color: #FD0;
+  border-color:#EC0;
 }
 </style>
