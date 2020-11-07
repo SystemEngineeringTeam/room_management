@@ -27,7 +27,7 @@
               </tr>
             </tbody>
           </table>
-          <input class="bt" type="submit" value="登録">
+          <input class="bt" type="submit" value="ログインする">
         </form>
       </div>
       <div v-else class="userPageinner">
@@ -36,34 +36,34 @@
           <tbody>
             <tr>
               <th>名前</th>
-              <th>
-                {{userData.Name}}
-              </th>
+              <th>{{userData.Name}}</th>
             </tr>
             <tr>
               <th>学籍番号</th>
-              <th>
-                {{userData.StudentNumber}}
-              </th>
+              <th>{{userData.StudentNumber}}</th>
             </tr>
             <tr>
               <th>メアド</th>
-              <th>
-                {{userData.Email}}
-              </th>
+              <th>{{userData.Email}}</th>
             </tr>
           </tbody>
         </table>
+        <Week></Week>
       </div>
     </div>
 </template>
 
 <script>
+import Week from './week.vue';
 import axios from 'axios';
 
 export default {
   name: 'User',
+  components:{
+    Week,
+  },
   data: ()=>({
+    host:null,
     jsonData: null,
     userData:null,
     logined:false,
@@ -109,6 +109,9 @@ export default {
       });
 
     },
+  },
+  mounted(){
+    this.host = this.$parent.host;
   },
 }
 </script>
