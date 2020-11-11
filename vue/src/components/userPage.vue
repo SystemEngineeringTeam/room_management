@@ -101,6 +101,7 @@ export default {
         this.userData =response.data;
         if(this.userData.Name!==''){
           this.logined=true;
+          this.$parent.loginData=this.loginData.frm;
         }else{
           this.errorMessage="ログインに失敗しました";
         }
@@ -112,6 +113,16 @@ export default {
   },
   mounted(){
     this.host = this.$parent.host;
+    // 自動ログイン
+    axios.post(this.$parent.host+'/login',this.$parent.loginData)
+			.then(response => {
+        this.userData =response.data;
+        if(this.userData.Name!==''){
+          this.logined=true;
+        }
+			}).catch((e) => {
+				alert(e);
+      });
   },
 }
 </script>
