@@ -21,6 +21,7 @@
           </tr>
         </tbody>
       </table>
+      {{jsonData}}
     </div>
 </template>
 
@@ -32,17 +33,15 @@ export default {
   name: 'week',
   data: ()=>({
     host:null,
-    params:{
-      Email:null,
-    },
+    Email:null,
     jsonData: null,
   }),
   methods:{
   },
   mounted(){
-    this.params.Email = this.$parent.userData.Email;
+    this.Email = this.$parent.userData.Email;
     this.host = this.$parent.host;
-    axios.get(this.host+'/reset',this.params)
+    axios.get(this.host+'/reset',{Email:this.Email})
 			.then(response => {
 				this.jsonData =response.data;
 			}).catch((e) => {

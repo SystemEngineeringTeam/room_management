@@ -19,34 +19,20 @@ func WeekResponce(w http.ResponseWriter, r *http.Request) {
 
 	r.Header.Set("Content-Type", "application/json")
 	if r.Method == http.MethodGet {
+		params := r.URL.Query()
 
-		jsonBytes, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			w.WriteHeader(http.StatusServiceUnavailable)
-			fmt.Fprintln(w, `{"status":"Unavailable"}`)
-			fmt.Println("Can't catch Email(io error)", err)
-			return
-		}
-
-		var rec dbctl.SingleEmail
-
-		if err := json.Unmarshal(jsonBytes, &rec); err != nil {
-			w.WriteHeader(http.StatusServiceUnavailable)
-			fmt.Fprintln(w, `{"status":"Unavailable"}`)
-			fmt.Println("Can't catch Email(JSON Unmarshal error)", err)
-			return
-		}
+		rec := dbctl.SingleEmail{Email: params.Get("Email")}
 
 		var resetSettings []dbctl.ResetSettingResponse
 
-		resetSettings, err = dbctl.GetResetSettings(rec.Email)
+		resetSettings, err := dbctl.GetResetSettings(rec.Email)
 		if err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			log.Fatal(err)
 			return
 		}
 
-		jsonBytes, err = json.Marshal(resetSettings)
+		jsonBytes, err := json.Marshal(resetSettings)
 		if err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			log.Fatal(err)
