@@ -14,14 +14,23 @@
         </thead>
         <tbody>
           <tr>
-            <!-- <th v-for="aday in jsonData" :key="aday.Day">
-              <span v-if="aday.IsOnce">true</span>
-              <span v-else>false</span>
-            </th> -->
+            <th v-for="aday in weeks" :key="aday">
+              <div v-if="aday==null">
+                リセットしない
+              </div>
+              <div v-else>
+                リセットする
+              </div>
+            </th>
           </tr>
         </tbody>
       </table>
-      {{jsonData}}
+      <div>
+        {{jsonData}}
+        <button v-on:click="hoge">日曜リセしてみる</button>
+        {{res}}
+      </div>
+
     </div>
 </template>
 
@@ -35,8 +44,24 @@ export default {
     host:null,
     Email:null,
     jsonData: null,
+    weeksName:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    weeks:[null,null,null,null,null,null,null],
+    res:null,
   }),
   methods:{
+    hoge(){
+      let postData={
+        Email:this.Email,
+        Day:'Sun',
+        IsOnce:true,
+      };
+      axios.put(this.$parent.host+'/reset',postData)
+			.then(response => {
+        this.res =response.data;
+			}).catch((e) => {
+				alert(e);
+      });
+    },
   },
   mounted(){
     this.Email = this.$parent.userData.Email;
@@ -48,7 +73,33 @@ export default {
 				alert(e);
       });
     
-
+    this.jsonData.forEach(aday => {
+      switch (aday.Day) {
+        case 'Sun':
+          this.weeks[0]=aday.IsOnce;
+          break;
+        case 'Mon':
+          this.weeks[1]=aday.IsOnce;
+          break;
+        case 'Tue':
+          this.weeks[2]=aday.IsOnce;
+          break;
+        case 'Wed':
+          this.weeks[3]=aday.IsOnce;
+          break;
+        case 'Thu':
+          this.weeks[4]=aday.IsOnce;
+          break;
+        case 'Fri':
+          this.weeks[5]=aday.IsOnce;
+          break;
+        case 'Sat':
+          this.weeks[6]=aday.IsOnce;
+          break;
+        default:
+          break;
+      }
+    });
   },
 }
 </script>
