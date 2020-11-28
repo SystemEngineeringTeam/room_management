@@ -4,7 +4,6 @@
       <table>
         <thead>
           <tr>
-            <th></th>
             <th>日</th>
             <th>月</th>
             <th>火</th>
@@ -16,7 +15,6 @@
         </thead>
         <tbody>
           <tr>
-            <th>リセット</th>
             <td v-for="(aday,index) in weeks" :key="aday">
               <div v-if="aday==null" class="resetContainer">
                 <input type="checkbox" v-on:click="resetOn(index)">
