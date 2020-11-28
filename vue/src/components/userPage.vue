@@ -48,7 +48,7 @@
             </tr>
           </tbody>
         </table>
-        <Week></Week>
+        <Week :key="reloadWeekKey"></Week>
       </div>
     </div>
 </template>
@@ -67,6 +67,7 @@ export default {
     jsonData: null,
     userData:null,
     logined:false,
+    reloadWeekKey:0,
     loginData:{
       Studentnumber:'',
       frm:{

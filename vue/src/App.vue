@@ -1,11 +1,14 @@
 <template>
     <div id="app">
       <div class="buttonsContainer">
-        <button id="btLog" v-on:click="viewLog">ログ</button>
-        <button id="btRoom" v-on:click="viewRoom">入室者一覧</button>
-        <button id="btUser" v-on:click="viewUser">ユーザー情報</button>
+        <!-- <div id="btReload" v-on:click="reloadComponent"><i class="fas fa-sync-alt"></i></div> -->
+        <button id="btLog" v-on:click="viewLog"><i class="fas fa-list-ul"></i></button>
+        <button id="btRoom" v-on:click="viewRoom"><i class="fas fa-door-open"></i></button>
+        <button id="btUser" v-on:click="viewUser"><i class ="fas fa-user"></i></button>
       </div>
+      <div :key="reloadKey">
       <component :is="view"></component>
+      </div>
     </div>
 </template>
 
@@ -25,6 +28,7 @@ export default {
       Password:'hoge',
     },
     view:"log",
+    reloadKey:0,
   }),
   components: {
     Room,
@@ -43,6 +47,9 @@ export default {
     viewUser(){
       this.view='user';
       document.title = 'ユーザー情報';
+    },
+    reloadComponent(){
+      this.reloadKey++;
     }
   },
   mounted(){
@@ -88,5 +95,19 @@ button:focus{
 #btUser{
 	background-color: #FD0;
   border-color:#EC0;
+}
+#btReload{
+  color: #2c3e50;
+	background-color: #DDD;
+  margin: 0. 0.25rem;
+  padding: 0.125rem 0.75rem;
+  border-radius: 1rem;
+  border-width: 3px;
+  border-style: solid;
+  font-weight: bold;
+  font-size: 1rem;
+}
+#btReload i{
+  vertical-align:middle;
 }
 </style>
