@@ -39,7 +39,7 @@ export default{
 </script>
 <style>
 	.room{
-		background-color: #CCC;
+		background-color: #5EA;
 		padding: 1rem 1rem 2rem;
 		display: flex;
 		flex-direction: column;
