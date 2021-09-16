@@ -27,7 +27,7 @@ export default {
       Email:'',
       Password:'hoge',
     },
-    view:"log",
+    view:"room",
     reloadKey:0,
   }),
   components: {
@@ -53,7 +53,7 @@ export default {
     }
   },
   mounted(){
-      document.title = 'ログ';
+      document.title = '入室者一覧';
   }
 }
 </script>
