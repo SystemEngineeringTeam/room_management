@@ -7,7 +7,7 @@
         <button id="btUser" v-on:click="viewUser"><i class ="fas fa-user"></i></button>
       </div>
       <div :key="reloadKey">
-      <component :is="view"></component>
+      <component :is="view" class="mainContainer"></component>
       </div>
     </div>
 </template>
@@ -27,7 +27,7 @@ export default {
       Email:'',
       Password:'hoge',
     },
-    view:"log",
+    view:"room",
     reloadKey:0,
   }),
   components: {
@@ -53,7 +53,7 @@ export default {
     }
   },
   mounted(){
-      document.title = 'ログ';
+      document.title = '入室者一覧';
   }
 }
 </script>
@@ -65,11 +65,48 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 30px;
+  display:flex;
+  flex-direction:column;
+}
+.mainContainer{
+  padding: 1rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+@media(max-width:560px){
+  h1{
+    font-size: 5.5vw;
+  }
+  :root{
+    font-size: 4vw;
+  }
+  .buttonsContainer button{
+    font-size: 8.5vw;
+    width: 100%;
+  }
+  .buttonsContainer{
+    position:fixed;
+    bottom:0;left:0;
+    width:calc(100% - 10px);
+    padding: 5px 5px 0;
+    background-color: white;
+    justify-content: space-evenly;
+  }
+  .mainContainer{
+    min-height:calc(100vh - 9vw);
+  }
+}
+@media(min-width:561px){
+  .buttonsContainer button{
+    font-size: 1.5rem;
+  }
+  #app{
+    margin-top: 30px;
+  }
 }
 .buttonsContainer{
   display: flex;
-  
 }
 .buttonsContainer button{
   color: #2c3e50;
@@ -79,7 +116,6 @@ export default {
   border-width: 3px 3px 0;
   border-style: solid;
   font-weight: bold;
-  font-size: 1.5rem;
 }
 button:focus{
   outline: 0;

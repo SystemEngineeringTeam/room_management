@@ -19,7 +19,7 @@
             </th>
             <th>
               <div v-if="log.Name===''">
-                <button v-on:click="register(log.uid,log.CardReadDatetime)">登録</button>
+                <button v-on:click="register(log.uid,log.CardReadDatetime)"><span>登録</span><i class="fas fa-user-plus"></i></button>
               </div>
               <div v-else>{{log.Name}}</div>
             </th>
@@ -66,10 +66,6 @@ export default {
 <style>
   .log{
 		background-color: #6DD;
-		padding: 1rem 1rem 2rem;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
 	}
   .log form{
     display: flex;
@@ -86,6 +82,16 @@ export default {
     border-style: solid;
     font-weight: bold;
     font-size: 1.5rem;
+  }
+  @media(max-width:560px){
+    .log button span{
+      display:none;
+    }
+  }
+  @media(min-width:561px){
+    .log button i{
+      display:none;
+    }
   }
   .log button:hover{
     background-color: #0BD;

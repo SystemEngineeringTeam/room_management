@@ -22,7 +22,7 @@
                   <label for="pass">パスワード</label>
                 </th>
                 <th>
-                  <input type="text" v-model="loginData.frm.Password" required readonly>
+                  <input type="text" v-model="loginData.frm.Password" required>
                 </th>
               </tr>
             </tbody>
@@ -130,10 +130,6 @@ export default {
 <style>
   .userPage{
 		background-color: #FD0;
-		padding: 1rem 1rem 2rem;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
 	}
   .loginContainer{
   left: 0;
@@ -142,6 +138,11 @@ export default {
   display: flex;
   justify-content: center;
   background-color: #FD7;
+  }
+  .loginContainer input[type="text"]{
+    width:auto;
+    width: 30vw;
+    border: none;
   }
   .userPage .bt{
     padding: 0.25rem 1rem;

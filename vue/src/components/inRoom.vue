@@ -40,9 +40,5 @@ export default{
 <style>
 	.room{
 		background-color: #5EA;
-		padding: 1rem 1rem 2rem;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
 	}
 </style>
