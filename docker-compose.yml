@@ -17,8 +17,6 @@ services:
             - "8081:80"
             ## Deploy case.
             # - "80:80"
-        networks:
-            - room_network
     mysql:
         container_name: room_management_mysql
         build: ./mysql
@@ -29,10 +27,5 @@ services:
             MYSQL_DATABASE: production_db
             MYSQL_USER: gopher
             MYSQL_PASSWORD: setsetset
-        networks:
-            - room_network
         security_opt:
             - seccomp:unconfined
-networks:
-    room_network:
-        external: true
