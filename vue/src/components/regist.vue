@@ -72,7 +72,7 @@ export default {
       
       // jsonを送信する
       var reqPost = new XMLHttpRequest();
-      reqPost.open('POST',this.$parent.host+'/user',true);// apiに送るリクエストのURL指定
+      reqPost.open('POST',this.host+'/user',true);// apiに送るリクエストのURL指定
       reqPost.setRequestHeader('Content-Type','application/json');
       reqPost.send(JSON.stringify(this.frm));
       location.reload(true);

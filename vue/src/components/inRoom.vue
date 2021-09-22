@@ -28,7 +28,7 @@ export default{
 		jsonData: null,
 	}),
 	mounted (){
-		axios.get(this.$parent.host+'/user')
+		axios.get(this.host+'/user')
 			.then(response => {
 				this.jsonData =response.data;
 			}).catch((e) => {
