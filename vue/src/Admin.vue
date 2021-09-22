@@ -1,6 +1,7 @@
 <template>
   <div id="admin">
     <div class=adminButtons>
+      <router-link class="btadmin" to="/">通常ページに戻る</router-link>
       <router-link class="btadmin" to="/admin">トップ</router-link>
       <router-link class="btadmin" to="/admin/log">アナリティクス</router-link>
     </div>

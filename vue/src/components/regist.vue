@@ -26,7 +26,7 @@
                   <label for="pass">パスワード</label>
                 </th>
                 <th>
-                  <input type="text" v-model="frm.Password" required>
+                  <input type="password" v-model="frm.Password" required>
                 </th>
               </tr>
               <tr>

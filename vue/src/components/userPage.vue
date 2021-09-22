@@ -22,7 +22,7 @@
                   <label for="pass">パスワード</label>
                 </th>
                 <th>
-                  <input type="text" v-model="loginData.frm.Password" required>
+                  <input type="password" v-model="loginData.frm.Password" required>
                 </th>
               </tr>
             </tbody>
@@ -71,7 +71,7 @@ export default {
       Studentnumber:'',
       frm:{
         Email:'',
-        Password:'hoge',
+        Password:'',
       },
     },
     errorMessage:'',
@@ -137,7 +137,7 @@ export default {
   justify-content: center;
   background-color: #FD7;
   }
-  .loginContainer input[type="text"]{
+  .loginContainer input[type="text"],.loginContainer input[type="password"]{
     width:auto;
     width: 30vw;
     border: none;
