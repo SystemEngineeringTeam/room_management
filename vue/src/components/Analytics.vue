@@ -1,30 +1,43 @@
 <template>
     <div id="analytics">
       <h1>入退室グラフ</h1>
-      <div>
-        <input type="date" :value="startTex.date" @input="startDate = inputDate(startDate,$event.target.value);graphData=genGraphData(jsonData,startDate,endDate);dates2Tex();">
-        <input type="time" :value="startTex.time" @input="startDate = inputTime(startDate,$event.target.value);graphData=genGraphData(jsonData,startDate,endDate);dates2Tex();">
-        ～
-        <input type="date" :value="endTex.date" @input="endDate = inputDate(endDate,$event.target.value);graphData=genGraphData(jsonData,startDate,endDate);dates2Tex();">
-        <input type="time" :value="endTex.time" @input="endDate = inputTime(endDate,$event.target.value);graphData=genGraphData(jsonData,startDate,endDate);dates2Tex();">
+        <div style="margin-bottom:4rem">
+          <input type="date" :value="startTex.date" @input="startDate = inputDate(startDate,$event.target.value);graphData=genGraphData(jsonData,startDate,endDate);dates2Tex();">
+          <input type="time" :value="startTex.time" @input="startDate = inputTime(startDate,$event.target.value);graphData=genGraphData(jsonData,startDate,endDate);dates2Tex();">
+          ～
+          <input type="date" :value="endTex.date" @input="endDate = inputDate(endDate,$event.target.value);graphData=genGraphData(jsonData,startDate,endDate);dates2Tex();">
+          <input type="time" :value="endTex.time" @input="endDate = inputTime(endDate,$event.target.value);graphData=genGraphData(jsonData,startDate,endDate);dates2Tex();">
+        </div>
+        
         
         <!-- <div v-for="(log,itr) in jsonData" :key="itr">
           {{itr}}:{{log}}
         </div> -->
         <h3 v-if="Object.keys(graphData).length==0">この期間の入室はありません</h3>
-        <div class="graphContainer" v-for="(datum,stuNum) in graphData" :key="stuNum">
-          <span>
-            <small>{{stuNum}}</small><br>
-            {{datum.name}}
-          </span>
-          <!-- {{datum}} -->
-          <div class="graphBar" :style="datum.style">
-            <div v-for="n of datum.cnt" :key="n">
-            </div>
-          </div>
-        </div>
-      </div>
-      
+        <table class="graphContainer">
+          <!-- <div id="graphLines"></div> -->
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(datum,stuNum) in graphData" :key="stuNum">
+              <td>
+                <small>{{stuNum}}</small><br>
+                {{datum.name}}
+              </td>
+              <td style="width:100%">
+                <div class="graphBar" :style="datum.style">
+                  <div v-for="n of datum.cnt" :key="n">
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
     </div>
 </template>
 
@@ -151,21 +164,31 @@ export default {
   #analytics{
 		background-color: #6DD;
     padding-bottom:50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 	}
   .graphBar{
     display:grid;
     height:1rem;
-    width:calc(100% - 150px);
+    width: 100%;
   }
   .graphBar>*:nth-child(2n){
-    background-color:red;
+    background-color:#66bb6a;
   }
   .graphBar>*:nth-child(2n-1){
     /* background-color:blue; */
   }
   .graphContainer{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+    width:calc(100% - 10rem);
+  }
+  .graphContainer>*{
+    z-index: 1;
+  }
+  .graphGradLayer{
+    position: relative;
+    width:100%;
+    height:100%;
+    background-color: #AAA;
   }
 </style>
