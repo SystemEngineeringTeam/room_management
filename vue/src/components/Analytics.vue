@@ -105,6 +105,7 @@ export default {
       let befEnterMap = new Map();
       let nameMap = new Map();
       let timeRange = end.getTime()/1000-start.getTime()/1000;
+      let timeNow = new Date();
       d.forEach(log => {
         let logDateArr = log.CardReadDatetime.match(/(\d+)/g).map(str => parseInt(str, 10));
         let logTime = new Date(logDateArr[0],logDateArr[1]-1,logDateArr[2],logDateArr[3],logDateArr[4],logDateArr[5]);
@@ -134,12 +135,19 @@ export default {
           nameMap.set(log.StudentNumber,log.Name);
         }
       });
+      let nowTimePoint = (timeNow.getTime()/1000-start.getTime()/1000)/timeRange;
+      let isInNowTime = (nowTimePoint<=1&&nowTimePoint>=0);
       befEnterMap.forEach((val,key) => {
-        if(val==1&&!result.has(key)){
+        if(val==1&&!result.has(key)&&nowTimePoint>=0){
           result.set(key,{name:nameMap.get(key),style:{'grid-template-columns':'0fr '},cnt:1,fr:0});
         }
       });
       result.forEach(e => {
+        if(isInNowTime&&(e.cnt%2==1)){
+          e.style['grid-template-columns']+=(nowTimePoint-e.fr)+'fr ';
+          e.cnt++;
+          e.fr=nowTimePoint;
+        }
         e.style['grid-template-columns']+=(1-e.fr)+'fr';
         e.cnt++;
       });
