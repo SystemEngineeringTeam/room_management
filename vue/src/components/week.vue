@@ -1,6 +1,6 @@
 <template>
     <div class="resetDays">
-      <h2>リセットする日を指定する</h2>
+      <h2>リセットしない日を指定する</h2>
       <table>
         <thead>
           <tr>
@@ -39,7 +39,6 @@ import axios from "axios";
 export default {
   name: 'week',
   data: ()=>({
-    host:null,
     Email:null,
     jsonData: null,
     reqestData:{
@@ -76,11 +75,11 @@ export default {
     changeIsOnce(dayNum,IsOnce){
       this.reqestData.Day=this.weeksName[dayNum];
       this.reqestData.IsOnce=!IsOnce;
-      axios.put(this.$parent.host+'/reset',this.reqestData)
+      axios.put(this.host+'/reset',this.reqestData)
 			.then(response => {
         this.res =response.data;
         this.reqestData.IsOnce=IsOnce;
-        axios.post(this.$parent.host+'/reset',this.reqestData)
+        axios.post(this.host+'/reset',this.reqestData)
         .then(response => {
           this.res =response.data;
           this.loadWeeks();
@@ -97,7 +96,6 @@ export default {
   },
   mounted(){
     this.Email = this.$parent.userData.Email;
-    this.host = this.$parent.host;
     this.reqestData.Email=this.Email;
     axios.get(this.host+'/reset?Email='+this.Email)
 			.then(response => {

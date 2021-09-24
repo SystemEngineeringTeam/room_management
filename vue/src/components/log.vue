@@ -41,7 +41,6 @@ export default {
   },
   data: ()=>({
     jsonData: null,
-    host: null,
     uid:null,
     time:null,
   }),
@@ -53,7 +52,6 @@ export default {
     }
   },
   mounted (){
-    this.host = this.$parent.host;
 		axios.get(this.host+'/log')
 			.then(response => {
 				this.jsonData =response.data;

@@ -22,7 +22,7 @@
                   <label for="pass">パスワード</label>
                 </th>
                 <th>
-                  <input type="text" v-model="loginData.frm.Password" required>
+                  <input type="password" v-model="loginData.frm.Password" required>
                 </th>
               </tr>
             </tbody>
@@ -63,7 +63,6 @@ export default {
     Week,
   },
   data: ()=>({
-    host:null,
     jsonData: null,
     userData:null,
     logined:false,
@@ -72,7 +71,7 @@ export default {
       Studentnumber:'',
       frm:{
         Email:'',
-        Password:'hoge',
+        Password:'',
       },
     },
     errorMessage:'',
@@ -97,7 +96,7 @@ export default {
       }
     },
     loginSubmit(){
-      axios.post(this.$parent.host+'/login',this.loginData.frm)
+      axios.post(this.host+'/login',this.loginData.frm)
 			.then(response => {
         this.userData =response.data;
         if(this.userData.Name!==''){
@@ -113,9 +112,8 @@ export default {
     },
   },
   mounted(){
-    this.host = this.$parent.host;
     // 自動ログイン
-    axios.post(this.$parent.host+'/login',this.$parent.loginData)
+    axios.post(this.host+'/login',this.$parent.loginData)
 			.then(response => {
         this.userData =response.data;
         if(this.userData.Name!==''){
@@ -139,7 +137,7 @@ export default {
   justify-content: center;
   background-color: #FD7;
   }
-  .loginContainer input[type="text"]{
+  .loginContainer input[type="text"],.loginContainer input[type="password"]{
     width:auto;
     width: 30vw;
     border: none;
