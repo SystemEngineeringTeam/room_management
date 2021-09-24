@@ -8,9 +8,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <wiringPi.h>
-#define pin 7
-
 // $ gcc -o quick_start_example1 quick_start_example1.c -lnfc
 
 // #define URL "https://www.tikuwa.monster/echo/"
@@ -138,9 +135,6 @@ int main(int argc, const char *argv[]) {
   //送信用関数 8ko
   char sendUid[255] = "{\"uid\":\"";
 
-  wiringPiSetup();
-  pinMode(pin, OUTPUT);
-
   printf("searching...\n");
   while (1) {
     if (nfc_initiator_poll_target(pnd, nmMifare, 2, 255, 2, &nt) > 0) {
@@ -149,13 +143,6 @@ int main(int argc, const char *argv[]) {
       //情報のポインタと数を送信してるよ
       print_hex(nt.nti.nai.abtUid, nt.nti.nai.szUidLen);
       //      sleep(sleepTime);
-
-      for (int i = 0; i < 2; i++) {
-        digitalWrite(pin, HIGH);
-        sleep(500);
-        digitalWrite(pin, LOW);
-        sleep(500);
-      }
 
       printf("searching...\n");
     } else {
