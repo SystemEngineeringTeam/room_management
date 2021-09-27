@@ -2,11 +2,11 @@
     <div id="analytics">
       <h1>入退室グラフ</h1>
         <div style="margin-bottom:4rem">
-          <input type="date" :value="startTex.date" @input="startDate = inputDate(startDate,$event.target.value);graphData=genGraphData(jsonData,startDate,endDate);dates2Tex();">
-          <input type="time" :value="startTex.time" @input="startDate = inputTime(startDate,$event.target.value);graphData=genGraphData(jsonData,startDate,endDate);dates2Tex();">
+          <input type="date" :value="startTex.date" @input="startDate = inputDate(startDate,$event.target.value);onChangeDates();">
+          <input type="time" :value="startTex.time" @input="startDate = inputTime(startDate,$event.target.value);onChangeDates();">
           ～
-          <input type="date" :value="endTex.date" @input="endDate = inputDate(endDate,$event.target.value);graphData=genGraphData(jsonData,startDate,endDate);dates2Tex();">
-          <input type="time" :value="endTex.time" @input="endDate = inputTime(endDate,$event.target.value);graphData=genGraphData(jsonData,startDate,endDate);dates2Tex();">
+          <input type="date" :value="endTex.date" @input="endDate = inputDate(endDate,$event.target.value);onChangeDates();">
+          <input type="time" :value="endTex.time" @input="endDate = inputTime(endDate,$event.target.value);onChangeDates();">
         </div>
         
         
@@ -14,29 +14,33 @@
           {{itr}}:{{log}}
         </div> -->
         <h3 v-if="Object.keys(graphData).length==0">この期間の入室はありません</h3>
-        <table class="graphContainer">
-          <!-- <div id="graphLines"></div> -->
-          <thead>
-            <tr>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(datum,stuNum) in graphData" :key="stuNum">
-              <td>
-                <small>{{stuNum}}</small><br>
-                {{datum.name}}
-              </td>
-              <td style="width:100%">
-                <div class="graphBar" :style="datum.style">
-                  <div v-for="n of datum.cnt" :key="n">
+        <div v-else class="graphContainer">
+          <div class="graphTableParent">
+            <table class="graphTable">
+            <thead>
+              <tr>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(datum,stuNum) in graphData" :key="stuNum">
+                <td>
+                  <small>{{stuNum}}</small><br>
+                  {{datum.name}}
+                </td>
+                <td style="width:100%">
+                  <div class="graphBar" :style="datum.style">
+                    <div v-for="n of datum.cnt" :key="n">
+                    </div>
                   </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+        
 
     </div>
 </template>
@@ -71,6 +75,12 @@ export default {
       this.endDate=new Date(defTime);
       this.endDate.setDate(defTime.getDate()+1);
       this.dates2Tex();
+    },
+    onChangeDates(){
+      this.graphData=this.genGraphData(this.jsonData,this.startDate,this.endDate);
+      this.dates2Tex();
+      this.glaphLines();
+
     },
     inputDate(date,val){
       let DateArr = val.match(/(\d+)/g).map(str => parseInt(str, 10));
@@ -153,7 +163,39 @@ export default {
       });
       return Object.fromEntries(result);
     },
+    glaphLines(){
+      this.$nextTick(()=>{
+      if (document.getElementsByClassName("graphGradLayer").length!=document.getElementsByClassName("graphTable").length) {
+        this.genGraphLines();
+      }else{
+        this.resizeGraphLines();
+      }
+      });
+    },
+    genGraphLines(){
+      // console.log("gen");
+      Array.from(document.getElementsByClassName("graphGradLayer")).forEach((e)=>{e.remove()});
+      let objects=document.getElementsByClassName("graphTable");
+      Array.from(objects).forEach ((e) => {
+        let height = e.offsetHeight;
+        let width = e.getElementsByTagName('th')[1].offsetWidth+3;
+        let lines = document.createElement("div");
+        lines.setAttribute('class','graphGradLayer');
+        lines.setAttribute('style','width:'+width+'px;height:'+height+'px;');
+        e.parentElement.parentElement.appendChild(lines);
+      });
+    },
+    resizeGraphLines(){
+      // console.log("resize");
+      Array.from(document.getElementsByClassName("graphGradLayer")).forEach((e)=>{
+        let tableObj = e.parentElement.firstChild.firstChild;
+        let height = tableObj.offsetHeight;
+        let width = tableObj.getElementsByTagName('th')[1].offsetWidth+3;
+        // console.log(width+":"+height);
+        e.setAttribute('style','width:'+width+'px;height:'+height+'px;');
 
+      });
+    }
   },
   mounted (){
     this.initDate();
@@ -162,10 +204,15 @@ export default {
 				this.jsonData =response.data;
         this.jsonData.sort((a,b)=>{return (new Date(a.CardReadDatetime)-new Date(b.CardReadDatetime))});
         this.graphData=this.genGraphData(this.jsonData,this.startDate,this.endDate);
+        this.glaphLines();
+        window.addEventListener("resize",this.glaphLines);
 			}).catch((e) => {
 				alert(e);
 			});
-	}
+	},
+  created(){
+    
+  },
 }
 </script>
 <style>
@@ -176,13 +223,21 @@ export default {
     flex-direction: column;
     align-items: center;
 	}
+  .graphTableParent{
+    position: relative;
+    width: 100%;
+  }
+  .graphTableParent>*,.graphTable{
+    position: absolute;
+    width: 100%;
+  }
   .graphBar{
     display:grid;
     height:1rem;
     width: 100%;
   }
   .graphBar>*:nth-child(2n){
-    background-color:#66bb6a;
+    background-color:#6b6;
   }
   .graphBar>*:nth-child(2n-1){
     /* background-color:blue; */
@@ -190,13 +245,12 @@ export default {
   .graphContainer{
     width:calc(100% - 10rem);
   }
-  .graphContainer>*{
+  /* .graphContainer>*{
     z-index: 1;
-  }
+  } */
   .graphGradLayer{
-    position: relative;
-    width:100%;
-    height:100%;
-    background-color: #AAA;
+    z-index: 0;
+    margin-left: auto;
+    background-color: #7EE;
   }
 </style>
